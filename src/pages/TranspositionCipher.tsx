@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 function parseNumericKey(key: string): number[] {
   const digits = key.replace(/[^0-9]/g, "").split("").map(Number);
   // Validate: must contain digits 1 to n without duplicates
-  const n = digits.length;
   const sorted = [...digits].sort((a, b) => a - b);
   const isValid = sorted.every((d, i) => d === i + 1);
   return isValid ? digits : [];
@@ -18,7 +17,7 @@ function parseNumericKey(key: string): number[] {
 
 function transpose(text: string, key: string, decrypt: boolean): string {
   const cleanText = text.toUpperCase().replace(/[^A-Z]/g, "");
-  const columnOrder = parseNumericKey(key);
+  const columnOrder = parseNumericKey(key); // e.g., [4,3,1,2,5,6,7] for key "4312567"
   const keyLen = columnOrder.length;
   
   if (keyLen === 0 || cleanText.length === 0) return cleanText;

@@ -693,38 +693,141 @@ export default function DESCipher() {
                     How It Works
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-lg">
+                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>How DES Encryption Works</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
+                    {/* Overview */}
+                    <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-lg p-4 border border-blue-500/30">
+                      <h4 className="font-semibold text-lg text-blue-400 mb-2">📘 Overview</h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        DES (Data Encryption Standard) is a symmetric-key algorithm that encrypts data in 64-bit blocks using a 56-bit key. 
+                        It uses a Feistel network structure with 16 rounds of processing, making it a classic example of substitution-permutation cryptography.
+                      </p>
+                    </div>
+
+                    {/* Parameters Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                      <div className="bg-muted/20 rounded-lg p-3">
-                        <h4 className="font-medium text-foreground mb-2">📊 DES Parameters</h4>
-                        <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                          <li>Block: <span className="text-primary">64 bits</span></li>
-                          <li>Key: <span className="text-primary">56 bits</span> effective</li>
-                          <li>Rounds: <span className="text-primary">16</span></li>
-                          <li>Structure: <span className="text-primary">Feistel</span></li>
+                      <div className="bg-muted/20 rounded-lg p-3 border border-border">
+                        <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                          <span className="text-lg">📊</span> DES Parameters
+                        </h4>
+                        <ul className="space-y-1.5 text-muted-foreground">
+                          <li className="flex justify-between">
+                            <span>Block Size:</span>
+                            <span className="text-primary font-semibold">64 bits</span>
+                          </li>
+                          <li className="flex justify-between">
+                            <span>Key Length:</span>
+                            <span className="text-primary font-semibold">56 bits (effective)</span>
+                          </li>
+                          <li className="flex justify-between">
+                            <span>Key Input:</span>
+                            <span className="text-primary font-semibold">64 bits (8 parity)</span>
+                          </li>
+                          <li className="flex justify-between">
+                            <span>Rounds:</span>
+                            <span className="text-primary font-semibold">16</span>
+                          </li>
+                          <li className="flex justify-between">
+                            <span>Structure:</span>
+                            <span className="text-primary font-semibold">Feistel Network</span>
+                          </li>
                         </ul>
                       </div>
 
-                      <div className="bg-muted/20 rounded-lg p-3">
-                        <h4 className="font-medium text-foreground mb-2">🔄 Feistel Function</h4>
-                        <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-                          <li><span className="text-orange-400">E:</span> 32→48 bits</li>
-                          <li><span className="text-green-400">XOR:</span> with subkey</li>
-                          <li><span className="text-purple-400">S-boxes:</span> 48→32 bits</li>
-                          <li><span className="text-blue-400">P:</span> permutation</li>
+                      <div className="bg-muted/20 rounded-lg p-3 border border-border">
+                        <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                          <span className="text-lg">🔄</span> Feistel Function (f)
+                        </h4>
+                        <ol className="space-y-1.5 text-muted-foreground">
+                          <li className="flex items-start gap-2">
+                            <span className="text-orange-400 font-bold">1.</span>
+                            <div>
+                              <span className="text-orange-400 font-semibold">Expansion (E):</span>
+                              <span className="text-xs block">32 bits → 48 bits</span>
+                            </div>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-400 font-bold">2.</span>
+                            <div>
+                              <span className="text-green-400 font-semibold">XOR:</span>
+                              <span className="text-xs block">Mix with 48-bit subkey</span>
+                            </div>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-purple-400 font-bold">3.</span>
+                            <div>
+                              <span className="text-purple-400 font-semibold">S-boxes:</span>
+                              <span className="text-xs block">48 bits → 32 bits (8 boxes)</span>
+                            </div>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-blue-400 font-bold">4.</span>
+                            <div>
+                              <span className="text-blue-400 font-semibold">Permutation (P):</span>
+                              <span className="text-xs block">Rearrange 32 bits</span>
+                            </div>
+                          </li>
                         </ol>
                       </div>
+                    </div>
 
-                      <div className="bg-yellow-500/10 rounded-lg p-3 border border-yellow-500/30 md:col-span-2">
-                        <h4 className="font-medium text-yellow-400 mb-1">⚠️ Security Note</h4>
-                        <p className="text-muted-foreground">
-                          DES is insecure (56-bit key). Use <span className="text-primary">AES</span> for secure applications.
-                        </p>
+                    {/* Step by Step Process */}
+                    <div className="bg-muted/20 rounded-lg p-4 border border-border">
+                      <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <span className="text-lg">🔢</span> Encryption Process
+                      </h4>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/50 flex items-center justify-center text-purple-400 font-bold">1</div>
+                          <div>
+                            <div className="font-semibold text-foreground">Block Division</div>
+                            <div className="text-xs text-muted-foreground">Plaintext converted to 64-bit blocks. Each block split into L (left 32 bits) and R (right 32 bits).</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center text-blue-400 font-bold">2</div>
+                          <div>
+                            <div className="font-semibold text-foreground">Initial Permutation (IP)</div>
+                            <div className="text-xs text-muted-foreground">Bits rearranged according to IP table for better diffusion. Produces L0 and R0.</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/50 flex items-center justify-center text-orange-400 font-bold">3</div>
+                          <div>
+                            <div className="font-semibold text-foreground">16 Feistel Rounds</div>
+                            <div className="text-xs text-muted-foreground">Each round: L<sub>i</sub> = R<sub>i-1</sub>, R<sub>i</sub> = L<sub>i-1</sub> ⊕ f(R<sub>i-1</sub>, K<sub>i</sub>). The f-function combines expansion, key mixing, S-box substitution, and permutation.</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-pink-500/20 border border-pink-500/50 flex items-center justify-center text-pink-400 font-bold">4</div>
+                          <div>
+                            <div className="font-semibold text-foreground">32-bit Swap</div>
+                            <div className="text-xs text-muted-foreground">After 16 rounds, swap L16 and R16 positions before final permutation.</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center text-green-400 font-bold">5</div>
+                          <div>
+                            <div className="font-semibold text-foreground">Final Permutation (FP)</div>
+                            <div className="text-xs text-muted-foreground">Inverse of IP applied to produce final 64-bit ciphertext.</div>
+                          </div>
+                        </div>
                       </div>
+                    </div>
+
+                    {/* Security Warning */}
+                    <div className="bg-yellow-500/10 rounded-lg p-4 border-2 border-yellow-500/30">
+                      <h4 className="font-semibold text-yellow-400 mb-2 flex items-center gap-2">
+                        <span className="text-lg">⚠️</span> Security Note
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        DES is <strong className="text-yellow-400">no longer secure</strong> for modern applications due to its 56-bit key size, 
+                        which is vulnerable to brute-force attacks. Use <strong className="text-primary">AES (Advanced Encryption Standard)</strong> with 
+                        128-bit, 192-bit, or 256-bit keys for secure encryption. DES is now primarily used for educational purposes and understanding cryptographic principles.
+                      </p>
                     </div>
                   </div>
                 </DialogContent>
@@ -1079,32 +1182,34 @@ export default function DESCipher() {
               />
             </div>
 
-            {/* L and R halves */}
-            {currentStep && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <div className="text-xs font-medium text-blue-400 mb-1">Left (L)</div>
-                  <div className="bg-blue-500/10 border border-blue-500/50 rounded-lg p-3">
-                    <div className="font-mono text-sm text-blue-400">
-                      {bitsToHex(currentStep.L)}
+            {/* Show L/R and Key only for non-round steps */}
+            {currentStep && currentStep.type !== "round" && (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-xs font-medium text-blue-400 mb-1">Left (L)</div>
+                    <div className="bg-blue-500/10 border border-blue-500/50 rounded-lg p-3">
+                      <div className="font-mono text-sm text-blue-400">
+                        {bitsToHex(currentStep.L)}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground mt-1">32 bits</div>
                     </div>
-                    <div className="text-[10px] text-muted-foreground mt-1">32 bits</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs font-medium text-orange-400 mb-1">Right (R)</div>
+                    <div className="bg-orange-500/10 border border-orange-500/50 rounded-lg p-3">
+                      <div className="font-mono text-sm text-orange-400">
+                        {bitsToHex(currentStep.R)}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground mt-1">32 bits</div>
+                    </div>
                   </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-xs font-medium text-orange-400 mb-1">Right (R)</div>
-                  <div className="bg-orange-500/10 border border-orange-500/50 rounded-lg p-3">
-                    <div className="font-mono text-sm text-orange-400">
-                      {bitsToHex(currentStep.R)}
-                    </div>
-                    <div className="text-[10px] text-muted-foreground mt-1">32 bits</div>
-                  </div>
-                </div>
-              </div>
+              </>
             )}
-
-            {/* Subkey display */}
-            {currentStep?.subkey && (
+            
+            {/* Show key for non-round steps that have a subkey */}
+            {currentStep && currentStep.type !== "round" && currentStep.subkey && (
               <div className="text-center pt-2 border-t border-border">
                 <div className="text-xs text-muted-foreground mb-1">
                   Round Key K{currentStep.round} (48 bits)
@@ -1115,47 +1220,490 @@ export default function DESCipher() {
               </div>
             )}
 
-            {/* Feistel Detail for round steps - enhanced but same style */}
+            {/* Completion State for FP - Show final diagram with completion message */}
+            {currentStep && currentStep.type === "fp" && (
+              <div className="pt-3 border-t border-border">
+                {/* Completion Banner */}
+                <div className="mb-3 flex items-center justify-center gap-2 p-3 bg-green-500/10 border border-green-500/50 rounded-lg">
+                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-base font-semibold text-green-400">Encryption Complete - All 16 Rounds Processed</span>
+                </div>
+
+                {/* Final Output Display */}
+                <div className="bg-muted/10 rounded-lg p-6 border border-border">
+                  <h4 className="text-sm font-medium text-green-400 text-center mb-4">Final Ciphertext Output</h4>
+                  <div className="space-y-4">
+                    {/* Final L and R */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center">
+                        <div className="text-xs font-medium text-blue-400 mb-2">Final Left (L)</div>
+                        <div className="px-6 py-3 bg-blue-500/10 border-2 border-blue-500/50 rounded text-blue-400 font-mono text-lg font-bold">
+                          {bitsToHex(currentStep.L).slice(0, 8)}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs font-medium text-orange-400 mb-2">Final Right (R)</div>
+                        <div className="px-6 py-3 bg-orange-500/10 border-2 border-orange-500/50 rounded text-orange-400 font-mono text-lg font-bold">
+                          {bitsToHex(currentStep.R).slice(0, 8)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Combined Ciphertext */}
+                    <div className="text-center pt-4 border-t border-border">
+                      <div className="text-sm font-medium text-green-400 mb-2">Complete Ciphertext (64 bits)</div>
+                      <div className="px-6 py-4 bg-green-500/10 border-2 border-green-500/50 rounded">
+                        <div className="font-mono text-xl text-green-300 font-bold break-all">
+                          {bitsToHex([...currentStep.L, ...currentStep.R])}
+                        </div>
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-2">
+                        After Final Permutation (FP)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Swap Step Visualization */}
+            {currentStep && currentStep.type === "swap" && (
+              <div className="pt-3 border-t border-border">
+                <h4 className="text-sm font-medium text-purple-400 text-center mb-3">32-bit Swap Operation</h4>
+                <div className="bg-muted/10 rounded-lg p-6 border border-border">
+                  <div className="flex justify-center">
+                    <div className="relative" style={{ width: '420px', height: '300px' }}>
+                      
+                      {/* Before Swap - Top */}
+                      <div className="absolute top-0 left-0 right-0">
+                        <div className="text-xs text-muted-foreground text-center mb-2 font-semibold">Before Swap</div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="text-center">
+                            <div className="text-xs font-medium text-blue-400 mb-2">L16</div>
+                            <div className="px-6 py-3 bg-blue-500/10 border-2 border-blue-500/50 rounded text-blue-400 font-mono text-lg font-bold">
+                              {bitsToHex(currentStep.R).slice(0, 8)}
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-xs font-medium text-orange-400 mb-2">R16</div>
+                            <div className="px-6 py-3 bg-orange-500/10 border-2 border-orange-500/50 rounded text-orange-400 font-mono text-lg font-bold">
+                              {bitsToHex(currentStep.L).slice(0, 8)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Swap Arrows */}
+                      <div className="absolute" style={{ top: '120px', left: '50%', transform: 'translateX(-50%)' }}>
+                        <div className="flex items-center gap-3">
+                          {/* Left arrow curving right */}
+                          <svg width="80" height="60" className="text-blue-500/60">
+                            <path d="M 10 10 Q 40 30 70 50" stroke="currentColor" strokeWidth="3" fill="none" />
+                            <polygon points="70,50 65,45 75,48 70,55" fill="currentColor" />
+                          </svg>
+                          
+                          {/* Swap icon */}
+                          <div className="w-10 h-10 rounded-full bg-purple-500/20 border-2 border-purple-500/50 flex items-center justify-center">
+                            <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                            </svg>
+                          </div>
+                          
+                          {/* Right arrow curving left */}
+                          <svg width="80" height="60" className="text-orange-500/60">
+                            <path d="M 70 10 Q 40 30 10 50" stroke="currentColor" strokeWidth="3" fill="none" />
+                            <polygon points="10,50 15,45 5,48 10,55" fill="currentColor" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* After Swap - Bottom */}
+                      <div className="absolute bottom-0 left-0 right-0">
+                        <div className="text-xs text-muted-foreground text-center mb-2 font-semibold">After Swap</div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="text-center">
+                            <div className="text-xs font-medium text-orange-400 mb-2">R16</div>
+                            <div className="px-6 py-3 bg-orange-500/10 border-2 border-orange-500/50 rounded text-orange-400 font-mono text-lg font-bold">
+                              {bitsToHex(currentStep.L).slice(0, 8)}
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-xs font-medium text-blue-400 mb-2">L16</div>
+                            <div className="px-6 py-3 bg-blue-500/10 border-2 border-blue-500/50 rounded text-blue-400 font-mono text-lg font-bold">
+                              {bitsToHex(currentStep.R).slice(0, 8)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  
+                  {/* Explanation */}
+                  <div className="text-center text-xs text-muted-foreground mt-4 pt-3 border-t border-border">
+                    The 32-bit halves are swapped before the final permutation
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Initial Input Visualization */}
+            {currentStep && currentStep.type === "initial" && (
+              <div className="pt-3 border-t border-border">
+                <h4 className="text-sm font-medium text-purple-400 text-center mb-3">Block Division - Initial Input</h4>
+                <div className="bg-muted/10 rounded-lg p-6 border border-border">
+                  <div className="space-y-6">
+                    
+                    {/* Block Info */}
+                    {currentStep.blockInfo && (
+                      <div className="text-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/10 border border-yellow-500/50 rounded-lg">
+                          <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-sm font-semibold text-yellow-400">
+                            Processing Block {currentStep.blockInfo.currentBlock + 1} of {currentStep.blockInfo.totalBlocks}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 64-bit Input Block */}
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground mb-2 font-semibold">64-Bit Input Block (Original Plaintext)</div>
+                      <div className="px-6 py-4 bg-purple-500/10 border-2 border-purple-500/50 rounded-lg">
+                        <div className="font-mono text-xl text-purple-300 font-bold break-all">
+                          {bitsToHex([...currentStep.L, ...currentStep.R])}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-2">16 hex characters (64 bits)</div>
+                      </div>
+                    </div>
+
+                    {/* Already divided L and R */}
+                    <div className="text-center">
+                      <div className="text-xs text-blue-300 font-semibold mb-3">Original Bits (Before IP Permutation)</div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center">
+                          <div className="text-xs font-medium text-blue-400 mb-2 flex items-center justify-center gap-1">
+                            <span>Left (L)</span>
+                            <span className="text-muted-foreground text-[10px]">• Bits 1-32</span>
+                          </div>
+                          <div className="px-6 py-3 bg-blue-500/10 border-2 border-blue-500/50 rounded text-blue-400 font-mono text-lg font-bold">
+                            {bitsToHex(currentStep.L).slice(0, 8)}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-2">32 bits (8 hex)</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs font-medium text-orange-400 mb-2 flex items-center justify-center gap-1">
+                            <span>Right (R)</span>
+                            <span className="text-muted-foreground text-[10px]">• Bits 33-64</span>
+                          </div>
+                          <div className="px-6 py-3 bg-orange-500/10 border-2 border-orange-500/50 rounded text-orange-400 font-mono text-lg font-bold">
+                            {bitsToHex(currentStep.R).slice(0, 8)}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-2">32 bits (8 hex)</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Explanation */}
+                    <div className="text-center text-xs text-muted-foreground pt-3 border-t border-border">
+                      The plaintext is converted to a 64-bit block. These original bits will be rearranged by the Initial Permutation (IP) in the next step.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Initial Permutation (IP) Visualization */}
+            {currentStep && currentStep.type === "ip" && (
+              <div className="pt-3 border-t border-border">
+                <h4 className="text-sm font-medium text-purple-400 text-center mb-3">Initial Permutation (IP)</h4>
+                <div className="bg-muted/10 rounded-lg p-6 border border-border">
+                  <div className="space-y-6">
+                    
+                    {/* Permutation Description */}
+                    <div className="text-center">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/50 rounded-lg">
+                        <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                        </svg>
+                        <span className="text-sm font-semibold text-blue-400">
+                          Bits Rearranged According to IP Table
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Before Permutation */}
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-3 text-center font-semibold">Before Permutation</div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center">
+                          <div className="text-xs font-medium text-muted-foreground mb-2">Original L (Bits 1-32)</div>
+                          <div className="px-4 py-2 bg-muted border border-border rounded text-foreground font-mono text-base">
+                            {/* Get the previous step's L value */}
+                            {(() => {
+                              const prevStep = steps.find(s => s.type === "initial");
+                              return prevStep ? bitsToHex(prevStep.L).slice(0, 8) : "--------";
+                            })()}
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs font-medium text-muted-foreground mb-2">Original R (Bits 33-64)</div>
+                          <div className="px-4 py-2 bg-muted border border-border rounded text-foreground font-mono text-base">
+                            {(() => {
+                              const prevStep = steps.find(s => s.type === "initial");
+                              return prevStep ? bitsToHex(prevStep.R).slice(0, 8) : "--------";
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Permutation Process */}
+                    <div className="relative py-4">
+                      <div className="flex justify-center items-center gap-4">
+                        {/* Left curved line */}
+                        <svg width="100" height="80" className="text-blue-400/40">
+                          <path d="M 10 10 Q 30 40 50 70" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="4,4" />
+                          <path d="M 30 10 Q 40 40 50 70" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="4,4" />
+                          <path d="M 50 10 Q 50 40 50 70" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="4,4" />
+                        </svg>
+
+                        {/* IP Table Icon */}
+                        <div className="px-6 py-4 bg-purple-500/20 border-2 border-purple-500/50 rounded-lg">
+                          <div className="text-center">
+                            <div className="text-sm font-bold text-purple-300 mb-1">IP TABLE</div>
+                            <div className="text-xs text-muted-foreground">64-bit permutation</div>
+                          </div>
+                        </div>
+
+                        {/* Right curved line */}
+                        <svg width="100" height="80" className="text-orange-400/40">
+                          <path d="M 50 10 Q 50 40 50 70" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="4,4" />
+                          <path d="M 70 10 Q 60 40 50 70" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="4,4" />
+                          <path d="M 90 10 Q 70 40 50 70" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="4,4" />
+                        </svg>
+                      </div>
+                      
+                      {/* Arrow down */}
+                      <div className="flex justify-center mt-2">
+                        <svg className="w-6 h-6 text-purple-400" fill="currentColor">
+                          <polygon points="3,0 3,14 0,14 6,20 12,14 9,14 9,0" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* After Permutation */}
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-3 text-center font-semibold">After Permutation</div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center">
+                          <div className="text-xs font-medium text-blue-400 mb-2">Permuted L (L0)</div>
+                          <div className="px-6 py-3 bg-blue-500/10 border-2 border-blue-500/50 rounded text-blue-400 font-mono text-lg font-bold">
+                            {bitsToHex(currentStep.L).slice(0, 8)}
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs font-medium text-orange-400 mb-2">Permuted R (R0)</div>
+                          <div className="px-6 py-3 bg-orange-500/10 border-2 border-orange-500/50 rounded text-orange-400 font-mono text-lg font-bold">
+                            {bitsToHex(currentStep.R).slice(0, 8)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Explanation */}
+                    <div className="text-center text-xs text-muted-foreground pt-3 border-t border-border">
+                      IP rearranges the 64 input bits to provide better diffusion. These permuted values (L0, R0) enter the 16 rounds.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* DES Feistel Network Visualization - Matching App Design */}
             {currentStep?.type === "round" && currentStep.expanded && (
               <div className="pt-3 border-t border-border">
-                <h4 className="text-sm font-medium text-purple-400 text-center mb-3">Feistel Function</h4>
-                <div className="bg-muted/20 rounded-lg p-4 space-y-4">
-                  {/* Enhanced horizontal flow - same style but bigger */}
-                  <div className="flex items-center justify-center gap-3 flex-wrap text-sm">
-                    <div className="px-4 py-2 bg-orange-500/20 rounded text-orange-400 font-mono text-sm">
-                      E(R)
-                    </div>
-                    <span className="text-muted-foreground text-xl">⊕</span>
-                    <div className="px-4 py-2 bg-green-500/20 rounded text-green-400 font-mono text-sm">
-                      K{currentStep.round}
-                    </div>
-                    <span className="text-muted-foreground text-lg">→</span>
-                    <div className="px-4 py-2 bg-purple-500/20 rounded text-purple-400 font-mono text-sm">
-                      S-boxes
-                    </div>
-                    <span className="text-muted-foreground text-lg">→</span>
-                    <div className="px-4 py-2 bg-purple-500/30 rounded text-purple-300 font-mono text-sm">
-                      P
+                <h4 className="text-sm font-medium text-purple-400 text-center mb-3">Round {currentStep.round} - Feistel Network</h4>
+                <div className="bg-muted/10 rounded-lg p-6 border border-border">
+                  <div className="flex justify-center">
+                    <div className="relative" style={{ width: '420px', height: '600px' }}>
+                      
+                      {/* Top Input L and R boxes - Matching your app's style */}
+                      <div className="absolute top-0 left-6">
+                        <div className="px-6 py-3 bg-blue-500/10 border-2 border-blue-500/50 rounded text-blue-400 font-mono text-lg font-bold">
+                          {(() => {
+                            const prevRound = steps.find(s => s.type === "round" && s.round === currentStep.round - 1);
+                            return prevRound ? bitsToHex(prevRound.L).slice(0, 8) : bitsToHex(currentStep.L).slice(0, 8);
+                          })()}
+                        </div>
+                      </div>
+                      <div className="absolute top-0 right-6">
+                        <div className="px-6 py-3 bg-orange-500/10 border-2 border-orange-500/50 rounded text-orange-400 font-mono text-lg font-bold">
+                          {(() => {
+                            const prevRound = steps.find(s => s.type === "round" && s.round === currentStep.round - 1);
+                            return prevRound ? bitsToHex(prevRound.R).slice(0, 8) : bitsToHex(currentStep.R).slice(0, 8);
+                          })()}
+                        </div>
+                      </div>
+
+                      {/* Labels under top boxes */}
+                      <div className="absolute top-14 left-20 text-sm text-muted-foreground">L{currentStep.round - 1}</div>
+                      <div className="absolute top-14 right-20 text-sm text-muted-foreground">R{currentStep.round - 1}</div>
+
+                      {/* Left vertical line going ALL THE WAY down to the XOR */}
+                      <div className="absolute left-20 w-1 bg-blue-500/60" style={{ top: '70px', height: '386px' }}></div>
+                      
+                      {/* Right vertical line going down */}
+                      <div className="absolute right-20 w-1 bg-orange-500/60" style={{ top: '70px', height: '50px' }}></div>
+                      
+                      {/* Horizontal line from right going into f-function with larger arrow */}
+                      <div className="absolute right-20 h-1 bg-orange-500/60" style={{ top: '120px', width: '70px' }}></div>
+                      <svg className="absolute w-5 h-5" style={{ top: '117.5px', right: '74px' }}>
+                        <polygon points="0,2.5 5,5 5,0" fill="currentColor" className="text-orange-500/80" />
+                      </svg>
+
+                      {/* F-Function Dashed Box - Matching purple theme */}
+                      <div className="absolute left-1/2 transform -translate-x-1/2" style={{ top: '100px', width: '280px' }}>
+                        <div className="border-2 border-dashed border-purple-500/50 rounded-lg p-5 bg-purple-500/5">
+                          <div className="text-center space-y-2.5">
+                            {/* Expansion Permutation */}
+                            <div>
+                              <div className="text-xs text-orange-400 font-bold mb-1.5 uppercase tracking-wider">Expansion Permutation</div>
+                              <div className="px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 text-sm font-mono font-bold">
+                                32 → 48 bits
+                              </div>
+                              {/* Show expanded value */}
+                              <div className="mt-1.5 text-xs font-mono text-orange-300/80 px-2 font-semibold">
+                                {bitsToHex(currentStep.expanded).slice(0, 12)}
+                              </div>
+                            </div>
+                            
+                            {/* Downward arrow */}
+                            <div className="flex justify-center">
+                              <svg className="w-6 h-6 text-muted-foreground" fill="currentColor">
+                                <polygon points="3,0 3,14 0,14 6,20 12,14 9,14 9,0" />
+                              </svg>
+                            </div>
+
+                            {/* XOR circle with key input */}
+                            <div className="relative flex items-center justify-center py-1.5">
+                              <div className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center bg-background z-10">
+                                <div className="text-foreground font-bold text-xl">⊕</div>
+                              </div>
+                              {/* Key arrow from right - larger and more prominent */}
+                              <div className="absolute h-1 bg-green-500/60" style={{ right: '-86px', width: '84px', top: '19px' }}></div>
+                              <svg className="absolute w-5 h-5" style={{ top: '17px', right: '-90px' }}>
+                                <polygon points="0,2.5 5,5 5,0" fill="currentColor" className="text-green-500/80" />
+                              </svg>
+                              {/* Round key box on the right */}
+                              <div className="absolute" style={{ right: '-200px', top: '-10px', width: '150px' }}>
+                                <div className="text-center">
+                                  <div className="text-xs text-muted-foreground mb-1 font-semibold">KEY</div>
+                                  <div className="px-3 py-2 bg-green-500/10 border-2 border-green-500/50 rounded">
+                                    <div className="text-sm text-green-400 font-mono font-bold">
+                                      {currentStep.subkey ? bitsToHex(currentStep.subkey) : ""}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Downward arrow */}
+                            <div className="flex justify-center">
+                              <svg className="w-6 h-6 text-muted-foreground" fill="currentColor">
+                                <polygon points="3,0 3,14 0,14 6,20 12,14 9,14 9,0" />
+                              </svg>
+                            </div>
+
+                            {/* S-Boxes */}
+                            <div className="py-1.5">
+                              <div className="text-xs text-purple-400 font-bold mb-2 uppercase tracking-wider">8 S Boxes</div>
+                              <div className="px-4 py-2 bg-purple-500/20 border border-purple-500/30 rounded text-purple-400 text-xs font-mono font-bold tracking-wider">
+                                S₁  S₂  S₃  S₄  S₅  S₆  S₇  S₈
+                              </div>
+                              {/* Show S-box output */}
+                              <div className="mt-1.5 text-xs font-mono text-purple-300/80 px-2 font-semibold">
+                                48 → 32 bits
+                              </div>
+                            </div>
+                            
+                            {/* Downward arrow */}
+                            <div className="flex justify-center">
+                              <svg className="w-6 h-6 text-muted-foreground" fill="currentColor">
+                                <polygon points="3,0 3,14 0,14 6,20 12,14 9,14 9,0" />
+                              </svg>
+                            </div>
+
+                            {/* P-Box */}
+                            <div>
+                              <div className="px-5 py-2 bg-purple-500/30 border border-purple-500/40 rounded text-purple-300 text-base font-bold tracking-wide">
+                                P BOX
+                              </div>
+                              {/* Show final output */}
+                              <div className="mt-1.5 text-xs font-mono text-purple-300/80 px-2 font-semibold">
+                                {bitsToHex(currentStep.feistelOutput || []).slice(0, 8)}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Vertical line from f-function output going down */}
+                      <div className="absolute left-1/2 w-1 bg-purple-500/60 transform -translate-x-0.5" style={{ top: '382px', height: '70px' }}></div>
+                      
+                      {/* Horizontal line from f-function to XOR - RIGHT SIDE */}
+                      <div className="absolute left-1/2 h-1 bg-purple-500/60" style={{ top: '456px', width: '98px' }}></div>
+                      {/* Arrow pointing to XOR from right */}
+                      <svg className="absolute w-5 h-5" style={{ top: '453.5px', left: 'calc(50% + 94px)' }}>
+                        <polygon points="0,2.5 5,5 5,0" fill="currentColor" className="text-purple-500/80" />
+                      </svg>
+
+                      {/* Horizontal line from left L to XOR - LEFT SIDE */}
+                      <div className="absolute left-20 h-1 bg-blue-500/60" style={{ top: '456px', width: '98px' }}></div>
+                      {/* Arrow pointing to XOR from left */}
+                      <svg className="absolute w-5 h-5" style={{ top: '453.5px', left: '114px' }}>
+                        <polygon points="5,2.5 0,0 0,5" fill="currentColor" className="text-blue-500/80" />
+                      </svg>
+
+                      {/* Bottom XOR circle */}
+                      <div className="absolute left-1/2 transform -translate-x-1/2" style={{ top: '448px' }}>
+                        <div className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center bg-background z-10">
+                          <div className="text-foreground font-bold text-xl">⊕</div>
+                        </div>
+                      </div>
+
+                      {/* Vertical lines from XOR down to outputs */}
+                      <div className="absolute left-20 w-1 bg-orange-500/60" style={{ top: '492px', height: '70px' }}></div>
+                      <div className="absolute right-20 w-1 bg-orange-500/60" style={{ top: '492px', height: '70px' }}></div>
+
+                      {/* Bottom Output boxes - Matching your app's style */}
+                      <div className="absolute bottom-6 left-6">
+                        <div className="px-6 py-3 bg-blue-500/10 border-2 border-blue-500/50 rounded text-blue-400 font-mono text-lg font-bold">
+                          {(() => {
+                            const prevRound = steps.find(s => s.type === "round" && s.round === currentStep.round - 1);
+                            return prevRound ? bitsToHex(prevRound.R).slice(0, 8) : bitsToHex(currentStep.L).slice(0, 8);
+                          })()}
+                        </div>
+                      </div>
+                      <div className="absolute bottom-6 right-6">
+                        <div className="px-6 py-3 bg-orange-500/10 border-2 border-orange-500/50 rounded text-orange-400 font-mono text-lg font-bold">
+                          {bitsToHex(currentStep.R).slice(0, 8)}
+                        </div>
+                      </div>
+
+                      {/* Labels above bottom boxes */}
+                      <div className="absolute left-16 text-sm text-muted-foreground" style={{ bottom: '85px' }}>R{currentStep.round}</div>
+                      <div className="absolute right-16 text-sm text-muted-foreground" style={{ bottom: '85px' }}>L{currentStep.round}</div>
                     </div>
                   </div>
 
-                  {/* Enhanced S-box grid - same layout but bigger */}
-                  <div className="flex justify-center gap-3 flex-wrap">
-                    {currentStep.sboxOutputs?.map((output, i) => (
-                      <div key={i} className="text-center">
-                        <div className="text-xs text-muted-foreground mb-2">S{i + 1}</div>
-                        <div className="font-mono text-sm px-3 py-2 rounded bg-purple-500/20 text-purple-400 min-w-[3rem]">
-                          {output.map(b => b).join('')}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Enhanced final result - same style but bigger */}
-                  <div className="text-center">
-                    <div className="font-mono text-base px-4 py-2 rounded bg-purple-500/30 border border-purple-500/50 text-purple-300 inline-block">
-                      f = {currentStep.feistelOutput ? bitsToHex(currentStep.feistelOutput) : ""}
-                    </div>
+                  {/* Round formula */}
+                  <div className="text-center text-xs text-muted-foreground mt-4 pt-2 border-t border-border">
+                    L{currentStep.round} = R{currentStep.round - 1} • R{currentStep.round} = L{currentStep.round - 1} ⊕ f(R{currentStep.round - 1}, K{currentStep.round})
                   </div>
                 </div>
               </div>

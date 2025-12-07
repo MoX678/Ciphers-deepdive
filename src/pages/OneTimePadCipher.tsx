@@ -156,12 +156,7 @@ export default function OneTimePadCipher() {
     >
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Security Badge */}
-        <div className="flex justify-center">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/50 text-green-400">
-            <Shield className="w-4 h-4" />
-            <span className="text-sm font-medium">Perfect Secrecy (when used correctly)</span>
-          </div>
-        </div>
+
 
         {/* Input and Key */}
         <div className="glass-card p-6 space-y-4">

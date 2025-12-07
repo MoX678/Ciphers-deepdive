@@ -10,21 +10,21 @@ const ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // No J (I=J in Playfair)
 
 function generateMatrix(keyword: string): string[][] {
   const key = keyword.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
-  const used = new Set<string>();
+  const used = new Set<string>(); //ensure no duplicates
   const letters: string[] = [];
   
   // Add keyword letters first
   for (const char of key) {
     if (!used.has(char)) {
       used.add(char);
-      letters.push(char);
+      letters.push(char); // MONARCHY
     }
   }
   
   // Add remaining alphabet
   for (const char of ALPHABET) {
     if (!used.has(char)) {
-      used.add(char);
+      used.add(char); 
       letters.push(char);
     }
   }

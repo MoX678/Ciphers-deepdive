@@ -91,16 +91,14 @@ const Index = () => {
         />
       </div>
       
-      {/* Hero Section */}
+      {/* Hero Section - Reduced padding */}
       <section className="relative overflow-hidden z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-        <div className="container mx-auto px-4 py-20 relative">
+        <div className="container mx-auto px-4 py-12 md:py-16 relative">
           <div className="max-w-3xl mx-auto text-center">
-
-            
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground ">
               Ciphers
-              <span className="neon-text block mt-2">DeepDive</span>
+              <span className="neon-text  ml-2">Visualizer</span>
             </h1>
             
 
@@ -120,8 +118,6 @@ const Index = () => {
           ))}
         </div>
       </section>
-
-
     </div>
   );
 };
