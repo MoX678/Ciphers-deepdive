@@ -396,32 +396,35 @@ export default function HillCipher() {
             
             <div className="bg-green-500/5 rounded-lg p-4 border border-green-500/20">
               <label className="block text-sm font-medium text-green-400 mb-3">
-                Key Matrix 
+                Key Matrix (2x2)
               </label>
-              <div className="flex items-center gap-1">
-                <div className="text-2xl text-amber-500/60"></div>
-                <div className="grid grid-cols-2 gap-px">
-                      {keyMatrix.map((row, i) => 
-                        row.map((val, j) => (
-                          <div 
-                            key={`enc-${i}-${j}`} 
-                            className={cn(
-                              "w-8 h-8 bg-gradient-to-b from-green-500/25 to-green-500/10 border border-green-500/40 flex items-center justify-center text-sm font-bold text-green-400",
-                              i === 0 && j === 0 && "rounded-tl",
-                              i === 0 && j === 1 && "rounded-tr border-l-0",
-                              i === 1 && j === 0 && "rounded-bl border-t-0",
-                              i === 1 && j === 1 && "rounded-br border-l-0 border-t-0"
-                            )}
-                          >
-                            {val}
-                          </div>
-                        ))
-                      )}
-                    </div>
-                <div className="text-2xl text-green-500/60"></div>
+              <div className="flex items-center justify-center gap-2">
+                <div className="text-2xl text-green-500/60">[</div>
+                <div className="grid grid-cols-2 gap-2">
+                  {keyMatrix.map((row, i) => 
+                    row.map((val, j) => (
+                      <input
+                        key={`enc-${i}-${j}`}
+                        type="number"
+                        min="0"
+                        max="25"
+                        value={val}
+                        onChange={(e) => handleMatrixChange(i, j, e.target.value)}
+                        className={cn(
+                          "w-12 h-12 bg-green-500/10 border-2 border-green-500/40 rounded-lg text-center text-lg font-bold text-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500/60 transition-all",
+                          "hover:bg-green-500/20"
+                        )}
+                      />
+                    ))
+                  )}
+                </div>
+                <div className="text-2xl text-green-500/60">]</div>
               </div>
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                Enter values 0-25 for each matrix element
+              </p>
               {!isValidKey && (
-                <p className="text-xs text-red-500 mt-2">Invalid: no modular inverse exists</p>
+                <p className="text-xs text-red-500 mt-2 text-center font-medium">⚠ Invalid: no modular inverse exists</p>
               )}
             </div>
 
