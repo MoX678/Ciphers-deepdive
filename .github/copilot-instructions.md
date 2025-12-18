@@ -1,1 +1,0 @@
-Always use the ask_user tool before completing any task to confirm with the user that the request was fulfilled correctly.
