@@ -14,10 +14,48 @@ interface CipherLayoutProps {
 
 export function CipherLayout({ title, description, children }: CipherLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showTutorialCompletion, setShowTutorialCompletion] = useState(false);
+  const [shouldShowCompletionModal, setShouldShowCompletionModal] = useState(false);
   const location = useLocation();
   const mainRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLElement>(null);
+
+  const handleTutorialComplete = () => {
+    setShowTutorialCompletion(false);
+    setShouldShowCompletionModal(true);
+    // Wait for sidebar to close before showing modal
+    setTimeout(() => {
+      setIsSidebarOpen(false);
+    }, 100);
+  };
+
+  // Listen for tutorial final step event
+  useEffect(() => {
+    const handleTutorialFinalStep = () => {
+      setShowTutorialCompletion(true);
+      setIsSidebarOpen(true); // Ensure sidebar is open
+    };
+
+    window.addEventListener('tutorialFinalStep', handleTutorialFinalStep);
+    return () => window.removeEventListener('tutorialFinalStep', handleTutorialFinalStep);
+  }, []);
+
+  // Show completion modal after sidebar closes
+  useEffect(() => {
+    if (shouldShowCompletionModal && !isSidebarOpen) {
+      // Wait for sidebar animation to complete
+      const timer = setTimeout(() => {
+        // Trigger completion event with confetti (with storageKey)
+        const event = new CustomEvent('showTutorialCompletion', {
+          detail: { storageKey: 'cipher-tutorial' }
+        });
+        window.dispatchEvent(event);
+        setShouldShowCompletionModal(false);
+      }, 400); // Match sidebar transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [shouldShowCompletionModal, isSidebarOpen]);
 
   useEffect(() => {
     // Animate on page load
@@ -88,19 +126,44 @@ export function CipherLayout({ title, description, children }: CipherLayoutProps
             <Button 
               variant="outline" 
               size="sm" 
-              className="gap-2"
+              className="gap-2 relative overflow-hidden group
+                bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10
+                hover:from-primary/20 hover:via-primary/15 hover:to-primary/20
+                border-primary/30 hover:border-primary/50
+                transition-all duration-300 hover:shadow-lg hover:shadow-primary/20
+                hover:scale-105 active:scale-95"
               onClick={() => setIsSidebarOpen(true)}
               data-tutorial="all-ciphers-button"
             >
-              <Home className="w-4 h-4" />
-              All Ciphers
+              {/* Animated shine effect */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+              
+              <Home className="w-4 h-4 group-hover:rotate-[-10deg] transition-transform duration-300" />
+              <span className="font-semibold">All Ciphers</span>
+              
+              {/* Tooltip hint */}
+              <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 
+                bg-foreground text-background text-xs font-medium rounded-md
+                opacity-0 group-hover:opacity-100 group-hover:-top-12 
+                transition-all duration-300 pointer-events-none whitespace-nowrap
+                shadow-xl">
+                Browse all encryption methods
+                <span className="absolute top-full left-1/2 -translate-x-1/2 
+                  border-4 border-transparent border-t-foreground" />
+              </span>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Sidebar */}
-      <CipherSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <CipherSidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)}
+        showTutorialCompletion={showTutorialCompletion}
+        onTutorialComplete={handleTutorialComplete}
+      />
 
       {/* Main content */}
       <main ref={contentRef} className="px-4 lg:px-8 py-6 relative z-10">

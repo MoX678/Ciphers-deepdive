@@ -74,17 +74,18 @@ export const outputAreaStep: TutorialStep = {
   position: "top",
 };
 
-// Final step - All Ciphers sidebar (opens the sidebar then shows tooltip inside it)
+// Final step - All Ciphers sidebar (opens the sidebar and shows completion info box)
 export const allCiphersSidebarStep: TutorialStep = {
   target: "[data-tutorial='sidebar-header']", // Target the sidebar header
-  title: "Explore All Ciphers! 🎉",
-  description: "Great job completing the tutorial! Browse through our complete collection of classical and modern ciphers. Click on any cipher to try it!",
+  title: "Explore All Ciphers",
+  description: "Browse through our complete collection of classical and modern encryption methods. Click 'Got it' when you're ready!",
   position: "bottom",
   offset: { x: 0, y: 20 }, // Position just below the header
   preClickTarget: "[data-tutorial='all-ciphers-button']", // Click the button to open sidebar first
   preClickDelay: 400, // Wait for sidebar animation to complete
   hideBackdrop: true, // Sidebar has its own backdrop, don't double up
   noHighlight: true, // Don't add highlight class to the sidebar (it would affect positioning)
+  isFinalStep: true, // This is the final step
 };
 
 /**

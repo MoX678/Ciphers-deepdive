@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { X, ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,7 @@ export interface TutorialStep {
   target: string; // CSS selector for the element to highlight
   title: string;
   description: string;
-  position?: "top" | "bottom" | "left" | "right";
+  position?: "top" | "bottom" | "left" | "right" | "center"; // "center" for centered modal
   offset?: { x: number; y: number };
   waitForClick?: boolean; // Wait for user to click the highlighted element
   triggerNext?: boolean; // Automatically go to next step after click
@@ -17,6 +17,8 @@ export interface TutorialStep {
   preClickDelay?: number; // Delay in ms after pre-click before showing the step (default: 500)
   hideBackdrop?: boolean; // Hide the tutorial backdrop (useful when targeting modals/sidebars that have their own backdrop)
   noHighlight?: boolean; // Don't add the highlight class to the target element
+  waitForClose?: string; // CSS selector for element to watch - when it disappears, move to next step
+  isFinalStep?: boolean; // If true, this is a centered completion message
 }
 
 interface TutorialTooltipProps {
@@ -40,6 +42,7 @@ export function TutorialTooltip({
   const [hasCompleted, setHasCompleted] = useState(false);
   const [waitingForClick, setWaitingForClick] = useState(false);
   const [preClickDone, setPreClickDone] = useState(true); // True by default for steps without preClickTarget
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,48 +62,138 @@ export function TutorialTooltip({
     }
   }, [storageKey, autoStart, hasCompleted]);
 
-  const completeTutorial = () => {
+  const completeTutorial = useCallback((showModal: boolean = true) => {
     const currentTarget = document.querySelector(steps[currentStep]?.target);
     if (currentTarget) {
       currentTarget.classList.remove("tutorial-highlight");
     }
 
-    // Confetti celebration!
-    const duration = 3000;
-    const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+    // Check if we're on the home page - if so, don't show modal or confetti
+    const isOnHomePage = window.location.pathname === '/';
+    
+    if (!isOnHomePage) {
+      // Confetti celebration!
+      const duration = 3000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000 };
 
-    function randomInRange(min: number, max: number) {
-      return Math.random() * (max - min) + min;
-    }
-
-    const interval: ReturnType<typeof setInterval> = setInterval(function() {
-      const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
+      function randomInRange(min: number, max: number) {
+        return Math.random() * (max - min) + min;
       }
 
-      const particleCount = 50 * (timeLeft / duration);
-      
-      // Launch confetti from both sides
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-      });
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-      });
-    }, 250);
+      const interval: ReturnType<typeof setInterval> = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        
+        // Launch confetti from both sides
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+        });
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+        });
+      }, 250);
+    }
 
     localStorage.setItem(`tutorial-${storageKey}`, "true");
     setIsActive(false);
-    setHasCompleted(true);
+    
+    // Show completion modal only if not on home page and modal is requested
+    if (showModal && !isOnHomePage) {
+      setShowCompletionModal(true);
+    } else {
+      setHasCompleted(true);
+    }
+    
     onComplete?.();
-  };
+  }, [currentStep, steps, storageKey, onComplete]);
+
+  // Listen for completion event from CipherLayout
+  useEffect(() => {
+    const handleShowCompletion = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      // Only respond if:
+      // 1. This is the cipher tutorial (matching storageKey)
+      // 2. We're NOT on the home page (route check)
+      const isOnHomePage = window.location.pathname === '/';
+      if (customEvent.detail?.storageKey === storageKey && !isOnHomePage) {
+        completeTutorial(true);
+      }
+    };
+
+    window.addEventListener('showTutorialCompletion', handleShowCompletion);
+    return () => window.removeEventListener('showTutorialCompletion', handleShowCompletion);
+  }, [completeTutorial, storageKey]);
+
+  // Handle waitForClose - watch for element to disappear then advance/complete
+  useEffect(() => {
+    if (!isActive || currentStep >= steps.length) return;
+    
+    const step = steps[currentStep];
+    if (!step.waitForClose) return;
+
+    // Don't start checking until preClick is done (e.g., sidebar has opened)
+    if (!preClickDone) return;
+
+    // Add a small delay to ensure the element is fully rendered/visible before we start checking
+    const initialDelay = setTimeout(() => {
+      const checkInterval = setInterval(() => {
+        const targetElement = document.querySelector(step.waitForClose!) as HTMLElement;
+        
+        // Check if element is hidden or removed by checking:
+        // 1. Element doesn't exist
+        // 2. Element has translate-x-full class (fully translated off-screen)
+        // 3. Element's computed transform indicates it's off-screen
+        const isHidden = !targetElement || 
+                        targetElement.offsetParent === null ||
+                        (window.getComputedStyle(targetElement).transform !== 'none' && 
+                         window.getComputedStyle(targetElement).transform.includes('matrix') &&
+                         targetElement.getBoundingClientRect().left >= window.innerWidth);
+        
+        if (isHidden) {
+          clearInterval(checkInterval);
+          
+          // Additional wait to ensure animation is complete
+          setTimeout(() => {
+            // Final check - verify element is still hidden
+            const finalCheck = document.querySelector(step.waitForClose!) as HTMLElement;
+            const stillHidden = !finalCheck || 
+                              finalCheck.offsetParent === null ||
+                              finalCheck.getBoundingClientRect().left >= window.innerWidth;
+            
+            if (stillHidden) {
+              // Move to next step or complete
+              if (currentStep < steps.length - 1) {
+                const currentTarget = document.querySelector(step.target);
+                if (currentTarget) {
+                  currentTarget.classList.remove("tutorial-highlight");
+                }
+                const nextStep = currentStep + 1;
+                setCurrentStep(nextStep);
+                onStepChange?.(nextStep);
+              } else {
+                completeTutorial(true);
+              }
+            }
+          }, 400); // Wait for animation to complete
+        }
+      }, 200);
+
+      return () => clearInterval(checkInterval);
+    }, 300); // Wait 300ms after preClick is done before starting to check
+
+    return () => clearTimeout(initialDelay);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isActive, currentStep, steps, preClickDone]);
 
   // Handle click listener for wait-for-click steps
   useEffect(() => {
@@ -144,6 +237,19 @@ export function TutorialTooltip({
 
   useEffect(() => {
     if (!isActive || currentStep >= steps.length || !preClickDone) return;
+
+    const step = steps[currentStep];
+    // If this is the final step, dispatch event to show completion info in sidebar
+    // and hide the tutorial tooltip
+    if (step.isFinalStep) {
+      const event = new CustomEvent('tutorialFinalStep', { 
+        detail: { storageKey } 
+      });
+      window.dispatchEvent(event);
+      // Hide the tutorial tooltip when final step is reached
+      setIsActive(false);
+      return;
+    }
 
     const updatePosition = () => {
       const step = steps[currentStep];
@@ -206,7 +312,7 @@ export function TutorialTooltip({
         targetElement.classList.remove("tutorial-highlight");
       }
     };
-  }, [isActive, currentStep, steps, preClickDone]);
+  }, [isActive, currentStep, steps, preClickDone, storageKey]);
 
   // Handle preClickTarget - click another element before showing this step
   useEffect(() => {
@@ -289,6 +395,88 @@ export function TutorialTooltip({
   const handleSkip = () => {
     completeTutorial();
   };
+
+  // Early return if tutorial was already completed (don't show modal for already-completed tutorials)
+  if (hasCompleted && !showCompletionModal) return null;
+  if (!isActive && !showCompletionModal) return null;
+
+  // Render completion modal if shown (only when actively completing, not when already completed)
+  if (showCompletionModal && !hasCompleted) {
+    return (
+      <>
+        {/* Backdrop */}
+        <div className="fixed inset-0 bg-black/60 z-[9998] animate-in fade-in duration-300" />
+        
+        {/* Centered Completion Modal - Matches Tooltip Design */}
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          <div className="w-full max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-300">
+            <div className="bg-background/95 backdrop-blur-xl border border-primary/30 rounded-xl shadow-2xl shadow-primary/20 overflow-hidden">
+              {/* Progress Bar - 100% complete */}
+              <div className="h-1 bg-background/50">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-500 to-green-400 transition-all duration-300"
+                  style={{ width: '100%' }}
+                />
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-4">
+                {/* Header - Matches Tooltip Style */}
+                <div className="grid grid-cols-[auto_1fr] gap-4 items-center pb-4 border-b border-border/30">
+                  {/* Success Icon - No Animation */}
+                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                    <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  
+                  {/* Title */}
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-foreground">Tutorial Complete</h3>
+                    <div className="text-xs text-emerald-400 font-mono mt-1">
+                      All steps completed
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description - Matches Tooltip Style */}
+                <div className="bg-background/50 rounded-lg p-4 border border-border/20">
+                  <p className="text-sm text-foreground leading-relaxed text-center">
+                    You've successfully completed the tutorial! Explore our collection of classical and modern encryption methods to learn how cryptography works.
+                  </p>
+                </div>
+
+                <div className="bg-emerald-500/10 rounded-lg p-3 border border-emerald-500/20">
+                  <p className="text-sm text-emerald-400 font-medium text-center">
+                    Start encrypting and decrypting messages
+                  </p>
+                </div>
+
+                {/* Action Button - Matches All Ciphers Button Style */}
+                <Button
+                  onClick={() => {
+                    setShowCompletionModal(false);
+                    setHasCompleted(true);
+                  }}
+                  className="w-full relative overflow-hidden group
+                    bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-emerald-500/10
+                    hover:from-emerald-500/20 hover:via-emerald-500/15 hover:to-emerald-500/20
+                    border-emerald-500/30 hover:border-emerald-500/50
+                    transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/20
+                    hover:scale-105 active:scale-95 font-semibold"
+                >
+                  {/* Animated shine effect */}
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                    translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+                  <span className="relative">Get Started</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (!isActive || hasCompleted) return null;
 

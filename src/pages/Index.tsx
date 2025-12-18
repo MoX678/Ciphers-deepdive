@@ -27,8 +27,8 @@ const homeTutorialSteps: TutorialStep[] = [
   },
   {
     target: "[data-tutorial='cipher-card-0']",
-    title: "Interactive Cipher Cards",
-    description: "Click any cipher card to start learning! You'll see step-by-step visualizations of how each algorithm works.",
+    title: "Try Any Cipher",
+    description: "Click any cipher card to start learning! You'll see step-by-step visualizations of how each algorithm works. Choose one now to begin your journey!",
     position: "right",
     offset: { x: 20, y: 0 },
   },

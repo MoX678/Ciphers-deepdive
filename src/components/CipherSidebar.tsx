@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 interface CipherSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  showTutorialCompletion?: boolean;
+  onTutorialComplete?: () => void;
 }
 
 const ciphers = [
@@ -76,8 +78,13 @@ const ciphers = [
   }
 ];
 
-export function CipherSidebar({ isOpen, onClose }: CipherSidebarProps) {
+export function CipherSidebar({ isOpen, onClose, showTutorialCompletion, onTutorialComplete }: CipherSidebarProps) {
   const location = useLocation();
+
+  const handleTutorialComplete = () => {
+    onTutorialComplete?.();
+    onClose();
+  };
 
   return (
     <>
@@ -100,20 +107,80 @@ export function CipherSidebar({ isOpen, onClose }: CipherSidebarProps) {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b border-border/50 bg-gradient-to-r from-primary/10 to-blue-500/10" data-tutorial="sidebar-header">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-2xl font-bold text-foreground">All Ciphers</h2>
-              <button
-                onClick={onClose}
-                className="p-2 rounded-lg hover:bg-background/80 transition-colors"
-                aria-label="Close sidebar"
-              >
-                <X className="w-5 h-5" />
-              </button>
+          <div className="border-b border-border/50 bg-gradient-to-r from-primary/10 to-blue-500/10">
+            {/* Tutorial Completion Info Box */}
+            {showTutorialCompletion && (
+              <div className="p-4 pb-3">
+                <div className="bg-background/95 backdrop-blur-xl border border-primary/30 rounded-xl shadow-2xl shadow-primary/20 overflow-hidden">
+                  {/* Progress Bar - 100% complete */}
+                  <div className="h-1 bg-background/50">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 to-green-400 transition-all duration-300"
+                      style={{ width: '100%' }}
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4 space-y-3">
+                    {/* Header */}
+                    <div className="grid grid-cols-[auto_1fr] gap-3 items-center pb-3 border-b border-border/30">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                        <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-sm font-bold text-foreground">Tutorial Complete</h3>
+                        <div className="text-xs text-emerald-400 font-mono mt-0.5">
+                          All steps completed
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="bg-background/50 rounded-lg p-3 border border-border/20">
+                      <p className="text-xs text-foreground leading-relaxed text-center">
+                        Explore our collection of ciphers below or return home to start encrypting
+                      </p>
+                    </div>
+
+                    {/* Action Button - Matches All Ciphers Button Style */}
+                    <button
+                      onClick={handleTutorialComplete}
+                      className="w-full px-4 py-2 relative overflow-hidden group
+                        bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-emerald-500/10
+                        hover:from-emerald-500/20 hover:via-emerald-500/15 hover:to-emerald-500/20
+                        border border-emerald-500/30 hover:border-emerald-500/50
+                        text-sm font-semibold text-foreground rounded-lg
+                        transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/20
+                        hover:scale-105 active:scale-95"
+                    >
+                      {/* Animated shine effect */}
+                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                        translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+                      <span className="relative">Got it</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Title and Close */}
+            <div className="p-6" data-tutorial="sidebar-header">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-bold text-foreground">All Ciphers</h2>
+                <button
+                  onClick={onClose}
+                  className="p-2 rounded-lg hover:bg-background/80 transition-colors"
+                  aria-label="Close sidebar"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Explore the complete collection of cryptographic algorithms
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Explore the complete collection of cryptographic algorithms
-            </p>
           </div>
 
           {/* Cipher List - Table Style */}
