@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Info, Eye, EyeOff, ChevronLeft, ChevronRight, FastForward } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const desTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "8-Byte DES Key",
+    description: "DES uses a 64-bit key (8 characters). The algorithm processes data in 64-bit blocks through 16 rounds of the Feistel network with substitution and permutation.",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Feistel Network Rounds",
+    description: "Watch the 16 rounds of DES: initial permutation, expansion, S-box substitution, P-box permutation, and the final swap. Each step transforms the data block!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 // DES Tables
 const IP: number[] = [
@@ -615,6 +642,13 @@ export default function DESCipher() {
       title="DES Encryption"
       description="Data Encryption Standard - 64-bit block cipher with 56-bit key"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={desTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* Top Row - 2 columns: Controls + Step Navigation */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -623,7 +657,9 @@ export default function DESCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle and Info */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -772,7 +808,7 @@ export default function DESCipher() {
               </Dialog>
             </div>
 
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext" : "Input Text"}
               </label>
@@ -793,7 +829,7 @@ export default function DESCipher() {
                 )}
               </p>
             </div>
-            <div>
+            <div data-tutorial="key-control">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Key (64 bits)
               </label>
@@ -816,7 +852,7 @@ export default function DESCipher() {
               <p className="text-xs text-muted-foreground mt-1">56 effective bits</p>
             </div>
 
-            <div className="flex gap-2">
+            <div data-tutorial="animation-controls" className="flex gap-2">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -1070,11 +1106,10 @@ export default function DESCipher() {
             </div>
 
            
-           
           </div>
 
           {/* Right - Step Navigation & L/R display */}
-          <div className="glass-card p-5 space-y-4">
+          <div data-tutorial="visualization" className="glass-card p-5 space-y-4">
             {hasAnimated ? (
               <>
                 <div className="flex items-center justify-between gap-2">

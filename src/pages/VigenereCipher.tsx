@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Info, ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const vigenereTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "Enter the Keyword",
+    description: "The Vigenère cipher uses a keyword that repeats to match your message length. Each letter in the keyword determines the shift amount for the corresponding plaintext letter.",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Watch the Encryption",
+    description: "See how each letter is shifted by its corresponding keyword letter. The input, keyword, and output tapes show the transformation step by step!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -178,6 +205,13 @@ export default function VigenereCipher() {
       title="Vigenère Cipher"
       description="Polyalphabetic cipher using a keyword for shifting"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={vigenereTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* Top Row - 2 columns: Controls + Visualization */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -186,7 +220,9 @@ export default function VigenereCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle and Info */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -265,7 +301,7 @@ export default function VigenereCipher() {
               </Dialog>
             </div>
 
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext" : "Ciphertext"}
               </label>
@@ -277,7 +313,7 @@ export default function VigenereCipher() {
                 placeholder={mode === "encrypt" ? "Enter message..." : "Enter ciphertext..."}
               />
             </div>
-            <div>
+            <div data-tutorial="key-control">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Keyword
               </label>
@@ -290,7 +326,7 @@ export default function VigenereCipher() {
               />
             </div>
 
-            <div className="flex gap-2">
+            <div data-tutorial="animation-controls" className="flex gap-2">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -356,7 +392,7 @@ export default function VigenereCipher() {
           </div>
 
           {/* Right - Visualization + Steps */}
-          <div className="glass-card p-5 space-y-4">
+          <div data-tutorial="visualization" className="glass-card p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-foreground">
                 {mode === "encrypt" ? "Encryption" : "Decryption"} Visualization

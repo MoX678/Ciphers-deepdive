@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Info, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const playfairTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "Keyword Matrix",
+    description: "Enter a keyword to generate the 5×5 Playfair matrix. The keyword letters fill first (no duplicates), then remaining alphabet letters complete the grid. I and J share the same cell.",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Digraph Encryption",
+    description: "Watch how letter pairs are encrypted using three rules: same row (shift right), same column (shift down), or rectangle (swap corners). The matrix highlights show each transformation!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 const ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // No J (I=J in Playfair)
 
@@ -347,6 +374,13 @@ export default function PlayfairCipher() {
       title="Playfair Cipher"
       description="Digraph substitution cipher using a 5×5 key matrix"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={playfairTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* Top Row - 2 columns: Controls + Matrix */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -355,7 +389,9 @@ export default function PlayfairCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle and Info */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -422,7 +458,7 @@ export default function PlayfairCipher() {
               </Dialog>
             </div>
 
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext" : "Ciphertext"}
               </label>
@@ -436,7 +472,7 @@ export default function PlayfairCipher() {
               />
               <p className="text-xs text-muted-foreground mt-1">J is treated as I</p>
             </div>
-            <div>
+            <div data-tutorial="key-control">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Keyword
               </label>
@@ -450,7 +486,7 @@ export default function PlayfairCipher() {
               />
             </div>
 
-            <div className="flex gap-2">
+            <div data-tutorial="animation-controls" className="flex gap-2">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -509,7 +545,7 @@ export default function PlayfairCipher() {
           </div>
 
           {/* Right - 5x5 Matrix + Process */}
-          <div className="glass-card p-5 space-y-3">
+          <div data-tutorial="visualization" className="glass-card p-5 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-foreground">
                 Key Matrix <span className="text-muted-foreground font-normal">({keyword || "default"})</span>

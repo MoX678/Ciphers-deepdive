@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Eye, EyeOff, ChevronLeft, ChevronRight, Info, FastForward } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const aesTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "128-bit AES Key",
+    description: "AES-128 uses a 16-character key. The algorithm performs 10 rounds of SubBytes, ShiftRows, MixColumns, and AddRoundKey operations on a 4×4 state matrix.",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "State Matrix Transformation",
+    description: "Watch the 4×4 byte matrix transform through each AES round: S-box substitution, row shifting, column mixing, and key addition. This is the gold standard of modern encryption!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 // AES S-box
 const SBOX: number[] = [
@@ -1718,6 +1745,7 @@ export default function AESCipher() {
       title="AES Encryption"
       description="Advanced Encryption Standard - 128-bit block cipher"
     >
+      <TutorialTooltip steps={aesTutorialSteps} storageKey="cipher-tutorial" />
       
       <div className="w-full space-y-4">
         {/* Top Row - 2 columns: Controls + Step Navigation */}
@@ -1727,7 +1755,9 @@ export default function AESCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle and Info */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -1981,7 +2011,7 @@ export default function AESCipher() {
               </Dialog>
             </div>
 
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext (16 bytes)" : "Ciphertext (32 hex characters)"}
               </label>
@@ -1997,7 +2027,7 @@ export default function AESCipher() {
                 {mode === "encrypt" ? `${inputText.length}/16 bytes` : `${inputText.length}/32 hex chars`}
               </p>
             </div>
-            <div>
+            <div data-tutorial="key-control">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Key (128-bit)
               </label>
@@ -2019,7 +2049,7 @@ export default function AESCipher() {
               </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2" data-tutorial="animation-controls">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -2163,7 +2193,7 @@ export default function AESCipher() {
           </div>
 
           {/* Right - Step Navigation & State */}
-          <div className="glass-card p-5 space-y-4">
+          <div className="glass-card p-5 space-y-4" data-tutorial="visualization">
             {hasAnimated ? (
               <>
                 <div className="flex items-center justify-between gap-2">

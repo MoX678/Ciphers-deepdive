@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Info, ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const transpositionTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "Column Order Key",
+    description: "Enter a numeric key like '4312567' where each digit represents the read order for that column. Column under '1' is read first, '2' second, and so on.",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Grid Transposition",
+    description: "Watch the text fill into rows, then see columns read in numeric key order. The grid visualization highlights each column as it's processed!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 // Parse numeric key like "4312567" into column order
 function parseNumericKey(key: string): number[] {
@@ -241,6 +268,13 @@ export default function TranspositionCipher() {
       title="Row Transposition Cipher"
       description="Rearranges plaintext by writing in rows and reading columns by numeric key order"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={transpositionTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* Top Row - 2 columns: Controls + Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -249,7 +283,9 @@ export default function TranspositionCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle and Info */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -309,7 +345,7 @@ export default function TranspositionCipher() {
               </Dialog>
             </div>
 
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext" : "Ciphertext"}
               </label>
@@ -323,7 +359,7 @@ export default function TranspositionCipher() {
               />
               <p className="text-xs text-muted-foreground mt-1">{cleanInput.length} characters</p>
             </div>
-            <div>
+            <div data-tutorial="key-control">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Numeric Key
               </label>
@@ -347,7 +383,7 @@ export default function TranspositionCipher() {
               </p>
             </div>
 
-            <div className="flex gap-2">
+            <div data-tutorial="animation-controls" className="flex gap-2">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -504,7 +540,7 @@ export default function TranspositionCipher() {
           </div>
 
           {/* Right - Grid Visualization & Steps */}
-          <div className="glass-card p-5 space-y-4">
+          <div data-tutorial="visualization" className="glass-card p-5 space-y-4">
             {isKeyValid ? (
               <>
                 <div className="flex items-center justify-between mb-3">

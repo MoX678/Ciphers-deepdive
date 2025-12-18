@@ -12,6 +12,11 @@ export interface TutorialStep {
   offset?: { x: number; y: number };
   waitForClick?: boolean; // Wait for user to click the highlighted element
   triggerNext?: boolean; // Automatically go to next step after click
+  autoClick?: boolean; // Automatically click the target element when this step is shown
+  preClickTarget?: string; // CSS selector for an element to click BEFORE showing this step (useful for opening modals/sidebars)
+  preClickDelay?: number; // Delay in ms after pre-click before showing the step (default: 500)
+  hideBackdrop?: boolean; // Hide the tutorial backdrop (useful when targeting modals/sidebars that have their own backdrop)
+  noHighlight?: boolean; // Don't add the highlight class to the target element
 }
 
 interface TutorialTooltipProps {
@@ -34,6 +39,7 @@ export function TutorialTooltip({
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const [hasCompleted, setHasCompleted] = useState(false);
   const [waitingForClick, setWaitingForClick] = useState(false);
+  const [preClickDone, setPreClickDone] = useState(true); // True by default for steps without preClickTarget
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -137,7 +143,7 @@ export function TutorialTooltip({
   }, [isActive, currentStep, steps]);
 
   useEffect(() => {
-    if (!isActive || currentStep >= steps.length) return;
+    if (!isActive || currentStep >= steps.length || !preClickDone) return;
 
     const updatePosition = () => {
       const step = steps[currentStep];
@@ -178,8 +184,10 @@ export function TutorialTooltip({
 
         setTooltipPosition({ top, left });
 
-        // Add spotlight effect to target element
-        targetElement.classList.add("tutorial-highlight");
+        // Add spotlight effect to target element (unless noHighlight is set)
+        if (!step.noHighlight) {
+          targetElement.classList.add("tutorial-highlight");
+        }
       }
     };
 
@@ -198,7 +206,56 @@ export function TutorialTooltip({
         targetElement.classList.remove("tutorial-highlight");
       }
     };
+  }, [isActive, currentStep, steps, preClickDone]);
+
+  // Handle preClickTarget - click another element before showing this step
+  useEffect(() => {
+    if (!isActive || currentStep >= steps.length) return;
+    
+    const step = steps[currentStep];
+    if (!step.preClickTarget) {
+      setPreClickDone(true);
+      return;
+    }
+
+    // Reset preClickDone when step changes
+    setPreClickDone(false);
+
+    const preClickElement = document.querySelector(step.preClickTarget) as HTMLElement;
+    if (!preClickElement) {
+      setPreClickDone(true);
+      return;
+    }
+
+    // Click the element first
+    preClickElement.click();
+    
+    // Wait for the UI to update (e.g., sidebar to open)
+    const delay = step.preClickDelay || 500;
+    const timer = setTimeout(() => {
+      setPreClickDone(true);
+    }, delay);
+
+    return () => clearTimeout(timer);
   }, [isActive, currentStep, steps]);
+
+  // Handle autoClick - automatically click the target element when step is shown
+  useEffect(() => {
+    if (!isActive || currentStep >= steps.length || !preClickDone) return;
+    
+    const step = steps[currentStep];
+    if (!step.autoClick) return;
+
+    const targetElement = document.querySelector(step.target) as HTMLElement;
+    if (!targetElement) return;
+
+    // Small delay to let the UI update before clicking
+    const timer = setTimeout(() => {
+      targetElement.click();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [isActive, currentStep, steps, preClickDone]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -240,14 +297,16 @@ export function TutorialTooltip({
 
   return (
     <>
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/60 z-[100] pointer-events-none animate-in fade-in duration-300" />
+      {/* Backdrop - hidden when step has hideBackdrop set */}
+      {!step.hideBackdrop && (
+        <div className="fixed inset-0 bg-black/60 z-[9998] pointer-events-none animate-in fade-in duration-300" />
+      )}
 
       {/* Tooltip */}
       <div
         ref={tooltipRef}
         className={cn(
-          "fixed z-[101] w-full max-w-sm pointer-events-auto",
+          "fixed z-[9999] w-full max-w-sm pointer-events-auto",
           "animate-in fade-in slide-in-from-bottom-4 duration-300"
         )}
         style={{
@@ -369,8 +428,7 @@ export function TutorialTooltip({
       {/* Global Styles for Highlight */}
       <style>{`
         .tutorial-highlight {
-          position: relative;
-          z-index: 100;
+          z-index: 9998 !important;
           box-shadow: 0 0 0 4px hsl(var(--primary) / 0.5), 0 0 0 9999px rgba(0, 0, 0, 0.6) !important;
           border-radius: 0.5rem;
           animation: tutorial-pulse 2s ease-in-out infinite;

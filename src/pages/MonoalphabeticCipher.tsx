@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Shuffle, Info, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const monoalphabeticTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "Substitution Alphabet",
+    description: "Enter a 26-letter key where each letter maps to a unique substitute. Use 'Random' to generate a shuffled alphabet. Each plaintext letter is replaced by its corresponding key letter.",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Letter Substitution Map",
+    description: "Watch how each letter in your message is substituted using the key alphabet. The visualization shows the direct mapping from standard alphabet to your custom key!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -118,6 +145,13 @@ export default function MonoalphabeticCipher() {
       title="Monoalphabetic Cipher"
       description="Simple substitution cipher with a fixed letter mapping"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={monoalphabeticTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* Top Row - 2 columns: Controls + Visualization */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -126,7 +160,9 @@ export default function MonoalphabeticCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle and Info */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -166,7 +202,7 @@ export default function MonoalphabeticCipher() {
               </Dialog>
             </div>
 
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext" : "Ciphertext"}
               </label>
@@ -179,7 +215,7 @@ export default function MonoalphabeticCipher() {
               />
             </div>
 
-            <div>
+            <div data-tutorial="key-control">
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-medium text-foreground">
                   Substitution Key
@@ -205,7 +241,7 @@ export default function MonoalphabeticCipher() {
               )}
             </div>
 
-            <div className="flex gap-2">
+            <div data-tutorial="animation-controls" className="flex gap-2">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -265,7 +301,7 @@ export default function MonoalphabeticCipher() {
           </div>
 
           {/* Right - Combined Visualization with Substitution Table */}
-          <div className="glass-card p-5 space-y-5">
+          <div data-tutorial="visualization" className="glass-card p-5 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-foreground">
                 {mode === "encrypt" ? "Encryption" : "Decryption"} Visualization

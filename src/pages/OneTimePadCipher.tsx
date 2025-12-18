@@ -6,6 +6,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Shuffle, Info, AlertTriangle, Shield, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const otpTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "Random One-Time Key",
+    description: "The key must be truly random and at least as long as your message. Each key can only be used ONCE - that's what makes OTP theoretically unbreakable!",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Perfect Secrecy",
+    description: "Watch how each plaintext letter combines with its corresponding key letter. The key is 'destroyed' after use to ensure it's never reused!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -197,6 +224,13 @@ export default function OneTimePadCipher() {
       title="One-Time Pad"
       description="Theoretically unbreakable encryption with random key"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={otpTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* Security Warning Badge */}
  
@@ -208,7 +242,9 @@ export default function OneTimePadCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -295,7 +331,7 @@ export default function OneTimePadCipher() {
             </div>
 
             {/* Input Fields */}
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext Message" : "Ciphertext Message"}
               </label>
@@ -310,7 +346,7 @@ export default function OneTimePadCipher() {
               <p className="text-xs text-muted-foreground mt-1">{cleanInput.length} characters</p>
             </div>
             
-            <div>
+            <div data-tutorial="key-control">
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-foreground">
                   One-Time Key (Random)
@@ -373,7 +409,7 @@ export default function OneTimePadCipher() {
               )}
             </div>
 
-            <div className="flex gap-2">
+            <div data-tutorial="animation-controls" className="flex gap-2">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -455,7 +491,7 @@ export default function OneTimePadCipher() {
           </div>
 
           {/* Right - Visualization */}
-          <div className="glass-card p-5 space-y-4">
+          <div data-tutorial="visualization" className="glass-card p-5 space-y-4">
             {isKeyValid && cleanInput.length > 0 ? (
               <>
                 {/* Progress */}

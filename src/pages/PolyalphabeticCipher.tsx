@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Play, Pause, RotateCcw, Plus, Minus, ChevronRight, ChevronLeft, Info } from "lucide-react";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const polyalphabeticTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "Configure Shift Rules",
+    description: "Define multiple shift rules that cycle through your message. Each rule specifies a different shift amount, making the cipher harder to break than simple Caesar!",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Multi-Rule Encryption",
+    description: "Watch how different shift rules are applied based on letter position. The color-coded visualization shows which rule encrypts each character!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -217,6 +244,13 @@ export default function PolyalphabeticCipher() {
       title="Polyalphabetic Cipher"
       description="Position-based shifting with multiple shift rules"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={polyalphabeticTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* Top Row - 2 columns: Controls + Visualization */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -227,7 +261,9 @@ export default function PolyalphabeticCipher() {
             <div className="glass-card p-5">
               {/* Header with Mode Toggle and Info */}
               <div className="flex items-center justify-between mb-4">
-                <ModeToggle mode={mode} onChange={setMode} />
+                <div data-tutorial="mode-toggle">
+                  <ModeToggle mode={mode} onChange={setMode} />
+                </div>
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="ghost" size="sm" className="text-xs">
@@ -291,20 +327,22 @@ export default function PolyalphabeticCipher() {
                 </Dialog>
               </div>
 
-              <label className="block text-sm font-medium text-foreground mb-2">
-                {mode === "encrypt" ? "Plaintext" : "Ciphertext"}
-              </label>
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 30))}
-                className="w-full bg-input border border-border rounded-lg px-4 py-3 font-mono text-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder={mode === "encrypt" ? "Enter message..." : "Enter ciphertext..."}
-              />
+              <div data-tutorial="input-area">
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  {mode === "encrypt" ? "Plaintext" : "Ciphertext"}
+                </label>
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 30))}
+                  className="w-full bg-input border border-border rounded-lg px-4 py-3 font-mono text-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder={mode === "encrypt" ? "Enter message..." : "Enter ciphertext..."}
+                />
+              </div>
             </div>
 
             {/* Shift Rules - Tape Design */}
-            <div className="glass-card p-5 space-y-3">
+            <div data-tutorial="key-control" className="glass-card p-5 space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-foreground">Shift Rules (Key)</h3>
                 <Button
@@ -422,7 +460,7 @@ export default function PolyalphabeticCipher() {
             </div>
 
             {/* Animation Controls */}
-            <div className="glass-card p-4">
+            <div data-tutorial="animation-controls" className="glass-card p-4">
               <div className="flex gap-2">
                 <Button
                   onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
@@ -497,7 +535,7 @@ export default function PolyalphabeticCipher() {
           </div>
 
           {/* Right - Step-by-Step Visualization */}
-          <div className="glass-card p-5 space-y-4">
+          <div data-tutorial="visualization" className="glass-card p-5 space-y-4">
             <h3 className="text-sm font-semibold text-foreground">
               {mode === "encrypt" ? "Encryption" : "Decryption"} Steps
             </h3>

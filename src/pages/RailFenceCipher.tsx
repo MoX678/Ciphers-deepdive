@@ -6,6 +6,33 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, ChevronRight, ChevronLeft, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import {
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
+
+const railFenceTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
+  {
+    target: "[data-tutorial='key-control']",
+    title: "Number of Rails",
+    description: "Set the number of rails (rows) for the zigzag pattern. More rails create a more complex encryption. Text is written diagonally down and up across the rails.",
+    position: "right",
+    offset: { x: 20, y: 0 },
+  },
+  animationControlsStep,
+  {
+    target: "[data-tutorial='visualization']",
+    title: "Zigzag Pattern",
+    description: "Watch your text weave through the rails in a zigzag pattern. For encryption, text is read row by row. For decryption, the pattern is reconstructed!",
+    position: "left",
+    offset: { x: -20, y: 0 },
+  },
+]);
 
 // Rail Fence cipher logic
 function railFenceEncrypt(text: string, rails: number): string {
@@ -15,7 +42,7 @@ function railFenceEncrypt(text: string, rails: number): string {
   
   let rail = 0;
   let direction = 1; // 1 for down, -1 for up
-  
+   
   for (let i = 0; i < cleanText.length; i++) {
     fence[rail].push(cleanText[i]);
     
@@ -307,6 +334,13 @@ export default function RailFenceCipher() {
       title="Rail Fence Cipher"
       description="A transposition cipher that writes text in a zigzag pattern across multiple rails"
     >
+      {/* Tutorial */}
+      <TutorialTooltip
+        steps={railFenceTutorialSteps}
+        storageKey="cipher-tutorial"
+        autoStart={true}
+      />
+
       <div className="w-full space-y-4">
         {/* 2 Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -315,7 +349,9 @@ export default function RailFenceCipher() {
           <div className="glass-card p-5 space-y-4">
             {/* Header with Mode Toggle and Info */}
             <div className="flex items-center justify-between">
-              <ModeToggle mode={mode} onChange={setMode} />
+              <div data-tutorial="mode-toggle">
+                <ModeToggle mode={mode} onChange={setMode} />
+              </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs">
@@ -365,7 +401,7 @@ export default function RailFenceCipher() {
               </Dialog>
             </div>
 
-            <div>
+            <div data-tutorial="input-area">
               <label className="block text-sm font-medium text-foreground mb-2">
                 {mode === "encrypt" ? "Plaintext" : "Ciphertext"}
               </label>
@@ -380,7 +416,7 @@ export default function RailFenceCipher() {
               <p className="text-xs text-muted-foreground mt-1">{cleanInput.length} characters</p>
             </div>
 
-            <div>
+            <div data-tutorial="key-control">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Number of Rails
               </label>
@@ -405,7 +441,7 @@ export default function RailFenceCipher() {
               </p>
             </div>
 
-            <div className="flex gap-2">
+            <div data-tutorial="animation-controls" className="flex gap-2">
               <Button
                 onClick={isAnimating ? () => setIsAnimating(false) : startAnimation}
                 variant="neon"
@@ -502,7 +538,7 @@ export default function RailFenceCipher() {
           </div>
 
           {/* Right - Visualization */}
-          <div className="glass-card p-5">
+          <div data-tutorial="visualization" className="glass-card p-5">
             <h3 className="text-sm font-semibold text-foreground mb-4">
               {mode === "encrypt" ? "Encryption" : "Decryption"} Process
             </h3>

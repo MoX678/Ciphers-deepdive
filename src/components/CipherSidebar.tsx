@@ -96,10 +96,11 @@ export function CipherSidebar({ isOpen, onClose }: CipherSidebarProps) {
           "fixed top-0 right-0 h-full w-full sm:w-[480px] bg-background/95 backdrop-blur-xl border-l border-border/50 z-50 transition-transform duration-300 ease-in-out",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
+        data-tutorial="cipher-sidebar-content"
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b border-border/50 bg-gradient-to-r from-primary/10 to-blue-500/10">
+          <div className="p-6 border-b border-border/50 bg-gradient-to-r from-primary/10 to-blue-500/10" data-tutorial="sidebar-header">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-2xl font-bold text-foreground">All Ciphers</h2>
               <button

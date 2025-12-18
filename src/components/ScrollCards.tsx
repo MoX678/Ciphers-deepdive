@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CipherCard } from "@/components/CipherCard";
+import { GitHubStarButton } from "@/components/GitHubStarButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -524,6 +525,11 @@ export function ScrollCards() {
 
   return (
     <div className="relative w-full">
+      {/* GitHub Button - Fixed Top Right */}
+      <div className="fixed top-4 right-4 z-50">
+        <GitHubStarButton />
+      </div>
+
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col items-center justify-center relative">
         <div className="text-center p-4 max-w-4xl mx-auto">

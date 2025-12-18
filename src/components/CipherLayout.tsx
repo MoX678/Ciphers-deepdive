@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft, Home } from "lucide-react";
 import { Button } from "./ui/button";
 import { CipherSidebar } from "./CipherSidebar";
+import { GitHubStarButton } from "./GitHubStarButton";
 import gsap from "gsap";
 
 interface CipherLayoutProps {
@@ -82,15 +83,19 @@ export function CipherLayout({ title, description, children }: CipherLayoutProps
               <p className="text-sm text-muted-foreground">{description}</p>
             </div>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-2"
-            onClick={() => setIsSidebarOpen(true)}
-          >
-            <Home className="w-4 h-4" />
-            All Ciphers
-          </Button>
+          <div className="flex items-center gap-2">
+            <GitHubStarButton />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-2"
+              onClick={() => setIsSidebarOpen(true)}
+              data-tutorial="all-ciphers-button"
+            >
+              <Home className="w-4 h-4" />
+              All Ciphers
+            </Button>
+          </div>
         </div>
       </header>
 

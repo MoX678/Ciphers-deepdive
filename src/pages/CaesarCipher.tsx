@@ -7,23 +7,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Play, Pause, RotateCcw, Info, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
+import { 
+  createCipherTutorialSteps,
+  modeToggleStep,
+  inputAreaStep,
+  animationControlsStep,
+} from "@/lib/cipherTutorialSteps";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-const cipherTutorialSteps: TutorialStep[] = [
-  {
-    target: "[data-tutorial='mode-toggle']",
-    title: "Encrypt or Decrypt Mode",
-    description: "Switch between encryption and decryption modes. Encryption encodes your message, while decryption reveals the original text.",
-    position: "bottom",
-  },
-  {
-    target: "[data-tutorial='input-area']",
-    title: "Enter Your Message",
-    description: "Type the text you want to encrypt or decrypt. The cipher works with letters only—other characters remain unchanged.",
-    position: "right",
-    offset: { x: 20, y: 0 },
-  },
+const cipherTutorialSteps: TutorialStep[] = createCipherTutorialSteps([
+  modeToggleStep,
+  inputAreaStep,
   {
     target: "[data-tutorial='shift-control']",
     title: "Adjust the Shift Amount",
@@ -31,12 +26,7 @@ const cipherTutorialSteps: TutorialStep[] = [
     position: "right",
     offset: { x: 20, y: 0 },
   },
-  {
-    target: "[data-tutorial='animation-controls']",
-    title: "Animation Controls",
-    description: "Play to see the cipher in action step-by-step, pause to examine each letter, or reset to start over. Watch how each letter transforms!",
-    position: "top",
-  },
+  animationControlsStep,
   {
     target: "[data-tutorial='visualization']",
     title: "Visual Wheel",
@@ -44,7 +34,7 @@ const cipherTutorialSteps: TutorialStep[] = [
     position: "left",
     offset: { x: -20, y: 0 },
   },
-];
+]);
 
 function caesarEncrypt(text: string, shift: number): string {
   return text
@@ -135,7 +125,7 @@ export default function CaesarCipher() {
       {/* Tutorial */}
       <TutorialTooltip
         steps={cipherTutorialSteps}
-        storageKey="caesar-cipher"
+        storageKey="cipher-tutorial"
         autoStart={true}
       />
 
