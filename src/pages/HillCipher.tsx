@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { CipherLayout } from "@/components/CipherLayout";
 import { ModeToggle } from "@/components/ModeToggle";
+import { HillEducationalDialog } from "@/components/dialogs/HillEducationalDialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, ChevronRight, ChevronLeft, Info } from "lucide-react";
@@ -322,96 +323,7 @@ export default function HillCipher() {
               <div data-tutorial="mode-toggle">
                 <ModeToggle mode={mode} onChange={setMode} />
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    <Info className="w-3.5 h-3.5 mr-1" />
-                    How It Works
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>How Hill Cipher Works</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    {/* Visual Flow Diagram */}
-                    <div className="bg-muted/20 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3 text-center">Encryption Process Flow</h4>
-                      <div className="flex items-center justify-center gap-2 flex-wrap text-xs">
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-blue-500/20 text-blue-400 font-mono">HE</div>
-                          <span className="text-[10px] text-muted-foreground">Pair</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-blue-500/30 text-blue-300 font-mono">[7,4]</div>
-                          <span className="text-[10px] text-muted-foreground">Numbers</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-purple-500/20 text-purple-400 font-mono">K×V</div>
-                          <span className="text-[10px] text-muted-foreground">Multiply</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-orange-500/20 text-orange-400 font-mono">[33,34]</div>
-                          <span className="text-[10px] text-muted-foreground">Raw</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-green-500/20 text-green-400 font-mono">mod 26</div>
-                          <span className="text-[10px] text-muted-foreground">Wrap</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-green-500/30 text-green-300 font-mono">[7,8]</div>
-                          <span className="text-[10px] text-muted-foreground">Result</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-primary/20 text-primary font-mono font-bold">HI</div>
-                          <span className="text-[10px] text-muted-foreground">Output</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Details Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                      <div className="bg-muted/20 rounded-lg p-4">
-                        <h4 className="font-medium text-purple-400 mb-2">Matrix Multiplication</h4>
-                        <div className="font-mono text-muted-foreground space-y-1 text-xs">
-                          <p>Result[0] = K[0,0]×V[0] + K[0,1]×V[1]</p>
-                          <p>Result[1] = K[1,0]×V[0] + K[1,1]×V[1]</p>
-                        </div>
-                      </div>
-                      <div className="bg-muted/20 rounded-lg p-4">
-                        <h4 className="font-medium text-green-400 mb-2">Why Mod 26?</h4>
-                        <p className="text-muted-foreground text-xs">
-                          26 letters (A-Z). Modulo wraps results to 0-25 range for letter mapping.
-                        </p>
-                        <p className="text-muted-foreground mt-1 font-mono text-xs">33 mod 26 = 7 → H</p>
-                      </div>
-                      <div className="bg-muted/20 rounded-lg p-4">
-                        <h4 className="font-medium text-secondary mb-2">Key Requirements</h4>
-                        <ul className="text-muted-foreground space-y-1 text-xs">
-                          <li>• Square matrix (2×2)</li>
-                          <li>• det(K) coprime with 26</li>
-                          <li>• Values 0-25</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* Decryption Note */}
-                    <div className="bg-primary/10 rounded-lg p-4 border border-primary/30">
-                      <h4 className="text-sm font-medium text-primary mb-1">🔓 Decryption</h4>
-                      <p className="text-sm text-muted-foreground">
-                        To decrypt, multiply by the <strong className="text-foreground">inverse matrix</strong> (K⁻¹) instead of K.
-                        The inverse "undoes" encryption: K⁻¹ × (K × V) = V
-                      </p>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <HillEducationalDialog />
             </div>
 
             <div data-tutorial="input-area">

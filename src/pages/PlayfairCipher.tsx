@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { CipherLayout } from "@/components/CipherLayout";
 import { ModeToggle } from "@/components/ModeToggle";
+import { PlayfairEducationalDialog } from "@/components/dialogs/PlayfairEducationalDialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Play, Pause, RotateCcw, Info, ChevronLeft, ChevronRight } from "lucide-react";
@@ -392,70 +393,7 @@ export default function PlayfairCipher() {
               <div data-tutorial="mode-toggle">
                 <ModeToggle mode={mode} onChange={setMode} />
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    <Info className="w-3.5 h-3.5 mr-1" />
-                    How It Works
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-xl">
-                  <DialogHeader>
-                    <DialogTitle>How Playfair Cipher Works</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    {/* Rules */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                      <div className={cn("rounded-lg p-3 border", getRuleColor("row"))}>
-                        <h4 className="font-medium mb-1">Row Rule</h4>
-                        <p className="text-muted-foreground text-xs">
-                          Same row: shift {mode === "encrypt" ? "right" : "left"} (wrap around)
-                        </p>
-                      </div>
-                      <div className={cn("rounded-lg p-3 border", getRuleColor("column"))}>
-                        <h4 className="font-medium mb-1">Column Rule</h4>
-                        <p className="text-muted-foreground text-xs">
-                          Same column: shift {mode === "encrypt" ? "down" : "up"} (wrap around)
-                        </p>
-                      </div>
-                      <div className={cn("rounded-lg p-3 border", getRuleColor("rectangle"))}>
-                        <h4 className="font-medium mb-1">Rectangle Rule</h4>
-                        <p className="text-muted-foreground text-xs">
-                          Different row & column: swap columns
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Process */}
-                    <div className="bg-muted/20 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-2">Process</h4>
-                      <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
-                        <li>Build 5×5 matrix from keyword (remove duplicate letters)</li>
-                        <li>Split plaintext into digraphs (letter pairs)</li>
-                        <li>If a pair has same letters, insert X between them</li>
-                        <li>Apply the appropriate rule to each pair</li>
-                      </ol>
-                    </div>
-
-                    {/* Notes */}
-                    <div className="bg-yellow-500/10 rounded-lg p-3 border border-yellow-500/30 text-xs">
-                      <span className="text-yellow-400 font-medium">⚠️ Note:</span>
-                      <span className="text-muted-foreground ml-1">
-                        J is treated as I. X padding persists in decryption (e.g., "BALLOON" → encrypt → decrypt → "BALXLOON")
-                      </span>
-                    </div>
-
-                    {/* History */}
-                    <div className="bg-primary/10 rounded-lg p-4 border border-primary/30">
-                      <h4 className="text-sm font-medium text-primary mb-1">📜 Historical Note</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Invented by Charles Wheatstone in 1854, but named after Lord Playfair who promoted its use.
-                        Used by the British in WWI.
-                      </p>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <PlayfairEducationalDialog />
             </div>
 
             <div data-tutorial="input-area">

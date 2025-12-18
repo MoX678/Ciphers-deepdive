@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { CipherLayout } from "@/components/CipherLayout";
 import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Play, Pause, RotateCcw, Info, ChevronRight, ChevronLeft } from "lucide-react";
+import { VigenereEducationalDialog } from "@/components/dialogs/VigenereEducationalDialog";
+import { Play, Pause, RotateCcw, ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TutorialTooltip, TutorialStep } from "@/components/TutorialTooltip";
 import {
@@ -223,82 +223,7 @@ export default function VigenereCipher() {
               <div data-tutorial="mode-toggle">
                 <ModeToggle mode={mode} onChange={setMode} />
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    <Info className="w-3.5 h-3.5 mr-1" />
-                    How It Works
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-lg">
-                  <DialogHeader>
-                    <DialogTitle>How Vigenère Cipher Works</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    {/* Visual Flow Diagram */}
-                    <div className="bg-muted/20 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-foreground mb-3 text-center">Encryption Process</h4>
-                      <div className="flex items-center justify-center gap-2 flex-wrap text-sm">
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-blue-500/20 text-blue-400 font-mono">A (0)</div>
-                          <span className="text-[10px] text-muted-foreground">Plaintext</span>
-                        </div>
-                        <span className="text-muted-foreground">+</span>
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-secondary/20 text-secondary font-mono">L (11)</div>
-                          <span className="text-[10px] text-muted-foreground">Key</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-purple-500/20 text-purple-400 font-mono">mod 26</div>
-                          <span className="text-[10px] text-muted-foreground">Wrap</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="px-3 py-1.5 rounded bg-primary/20 text-primary font-mono font-bold">L (11)</div>
-                          <span className="text-[10px] text-muted-foreground">Output</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Explanation */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      <div className="bg-muted/20 rounded-lg p-4">
-                        <h4 className="font-medium text-primary mb-2">Encryption</h4>
-                        <p className="text-muted-foreground text-xs mb-2">
-                          Each plaintext letter is shifted by its corresponding key letter value.
-                        </p>
-                        <p className="font-mono text-xs text-foreground">(P + K) mod 26 = C</p>
-                      </div>
-                      <div className="bg-muted/20 rounded-lg p-4">
-                        <h4 className="font-medium text-secondary mb-2">Decryption</h4>
-                        <p className="text-muted-foreground text-xs mb-2">
-                          Reverse: subtract the key letter value from ciphertext.
-                        </p>
-                        <p className="font-mono text-xs text-foreground">(C - K + 26) mod 26 = P</p>
-                      </div>
-                    </div>
-
-                    {/* Key repeating note */}
-                    <div className="bg-secondary/10 rounded-lg p-4 border border-secondary/30">
-                      <h4 className="text-sm font-medium text-secondary mb-1">🔑 Key Repeating</h4>
-                      <p className="text-sm text-muted-foreground">
-                        The keyword repeats to match the message length. "LEMON" becomes "LEMONLEMONLE..." 
-                        for longer messages.
-                      </p>
-                    </div>
-
-                    {/* History note */}
-                    <div className="bg-primary/10 rounded-lg p-4 border border-primary/30">
-                      <h4 className="text-sm font-medium text-primary mb-1">📜 Historical Note</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Named after Blaise de Vigenère (16th century). Called "le chiffre indéchiffrable" 
-                        (the undecipherable cipher) for 300 years until broken in the 1800s.
-                      </p>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <VigenereEducationalDialog />
             </div>
 
             <div data-tutorial="input-area">
