@@ -1,4 +1,4 @@
-import { Info, Grid3x3, ArrowRight, ArrowDown, Maximize2, Key, Shield, BookOpen } from "lucide-react";
+import { Info, Grid3x3, Key, ArrowRight, ArrowDown, Maximize2, Shield, BookOpen, Target, ListOrdered, Binary } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -13,604 +13,737 @@ export function PlayfairEducationalDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="text-xs">
-          <Info className="w-3.5 h-3.5 mr-1" />
+        <Button variant="ghost" size="sm" className="text-xs gap-2 hover:bg-primary/10 transition-colors">
+          <Info className="w-3.5 h-3.5" />
           How It Works
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-b from-cyan-500/35 to-cyan-500/15 border-2 border-cyan-500">
+      
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="border-b border-border/50 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-b from-cyan-500/35 to-cyan-500/15 border-2 border-cyan-500 flex items-center justify-center shadow-sm shadow-cyan-500/20">
               <Grid3x3 className="w-6 h-6 text-cyan-400" />
             </div>
-            Playfair Cipher - Educational Guide
-          </DialogTitle>
-        </DialogHeader>
-
-        {/* Overview Section */}
-        <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-lg p-5 border border-cyan-500/30">
-          <h3 className="font-semibold text-lg text-cyan-400 mb-3">Overview</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-            The Playfair Cipher, invented by Charles Wheatstone in 1854 and popularized by Lord Playfair, 
-            is a digraphic substitution cipher that encrypts pairs of letters using a 5×5 key matrix. 
-            It was the first practical digraph cipher and was used extensively in military communications through World War I.
-          </p>
-          
-          {/* Visual Flow */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mt-4">
-            <div className="bg-background/50 rounded-lg p-3 border border-blue-500/20">
-              <div className="text-xs font-semibold text-blue-400 mb-1">1. Build Matrix</div>
-              <div className="text-xs text-muted-foreground">5×5 grid from keyword</div>
-            </div>
-            <div className="bg-background/50 rounded-lg p-3 border border-purple-500/20">
-              <div className="text-xs font-semibold text-purple-400 mb-1">2. Split Digraphs</div>
-              <div className="text-xs text-muted-foreground font-mono">HE LX LO</div>
-            </div>
-            <div className="bg-background/50 rounded-lg p-3 border border-orange-500/20">
-              <div className="text-xs font-semibold text-orange-400 mb-1">3. Find Positions</div>
-              <div className="text-xs text-muted-foreground">Locate in matrix</div>
-            </div>
-            <div className="bg-background/50 rounded-lg p-3 border border-green-500/20">
-              <div className="text-xs font-semibold text-green-400 mb-1">4. Apply Rule</div>
-              <div className="text-xs text-muted-foreground">Row/Col/Rectangle</div>
-            </div>
-            <div className="bg-background/50 rounded-lg p-3 border border-pink-500/20">
-              <div className="text-xs font-semibold text-pink-400 mb-1">5. Get Ciphertext</div>
-              <div className="text-xs text-muted-foreground font-mono">Output pairs</div>
+            <div>
+              <DialogTitle className="text-2xl">Playfair Cipher</DialogTitle>
+              <p className="text-sm text-muted-foreground mt-1">Interactive Educational Guide</p>
             </div>
           </div>
-        </div>
-
-        {/* Tabbed Content */}
-        <Tabs defaultValue="matrix" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
-            <TabsTrigger value="matrix">Key Matrix</TabsTrigger>
-            <TabsTrigger value="rowRule">Row Rule</TabsTrigger>
-            <TabsTrigger value="colRule">Column Rule</TabsTrigger>
-            <TabsTrigger value="rectRule">Rectangle</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
-          </TabsList>
-
-          {/* Key Matrix Construction Tab */}
-          <TabsContent value="matrix" className="space-y-4">
-            <div className="bg-gradient-to-b from-cyan-500/35 to-cyan-500/15 rounded-lg p-4 border-2 border-cyan-500 shadow-sm shadow-cyan-500/20">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded bg-cyan-500/20">
+        </DialogHeader>
+        
+        <div className="overflow-y-auto flex-1 px-1">
+          <div className="space-y-6 py-6">
+            {/* Overview Section - Always Visible */}
+            <div className="bg-gradient-to-br from-cyan-500/15 via-cyan-500/5 to-blue-500/10 rounded-xl p-6 border border-cyan-500/30">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-cyan-500/35 to-cyan-500/15 border-2 border-cyan-500 flex items-center justify-center shadow-sm shadow-cyan-500/20">
                   <Grid3x3 className="w-5 h-5 text-cyan-400" />
                 </div>
-                <h3 className="font-semibold text-lg text-cyan-400">5×5 Key Matrix Construction</h3>
+                <h3 className="text-lg font-bold text-foreground">How Playfair Cipher Works</h3>
               </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">What It Does</h4>
-                  <p className="text-sm text-muted-foreground">
-                    The key matrix is a 5×5 grid containing all 25 letters of the alphabet (I and J share a cell). 
-                    It's built from a keyword to create a unique arrangement that serves as the encryption key.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">How It Works</h4>
-                  <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                    <li><strong>Choose keyword:</strong> Example: "MONARCHY"</li>
-                    <li><strong>Remove duplicates:</strong> MONARCHY → MONARCH (remove duplicate Y)</li>
-                    <li><strong>Fill matrix left-to-right, top-to-bottom:</strong>
-                      <ul className="list-disc list-inside ml-6 mt-1">
-                        <li>Start with unique keyword letters: M O N A R C H</li>
-                        <li>Continue with remaining alphabet letters in order</li>
-                        <li>Combine I/J into one cell (treat J as I)</li>
-                      </ul>
-                    </li>
-                  </ol>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Example Matrix with "MONARCHY"</h4>
-                  <div className="bg-background/50 rounded-lg p-4">
-                    <div className="grid grid-cols-5 gap-2 max-w-xs mx-auto font-mono text-sm">
-                      {["M", "O", "N", "A", "R", "C", "H", "B", "D", "E", "F", "G", "I/J", "K", "L", "P", "Q", "S", "T", "U", "V", "W", "X", "Y", "Z"].map((letter, idx) => (
-                        <div key={idx} className="aspect-square flex items-center justify-center rounded bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-semibold">
-                          {letter}
-                        </div>
-                      ))}
+              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                The Playfair Cipher, invented by Charles Wheatstone in 1854 and popularized by Lord Playfair, 
+                is a digraphic substitution cipher that encrypts pairs of letters using a 5×5 key matrix. 
+                It was the first practical digraph cipher and was used extensively in military communications through World War I.
+              </p>
+              
+              {/* Visual Flow Steps */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="bg-background/60 rounded-lg p-4 border border-border/50 hover:border-blue-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded bg-gradient-to-b from-blue-500/35 to-blue-500/15 border border-blue-500 flex items-center justify-center">
+                      <Key className="w-4 h-4 text-blue-400" />
                     </div>
-                    <div className="text-xs text-center text-muted-foreground mt-3">
-                      Row indices: 0-4 (top to bottom)<br/>
-                      Column indices: 0-4 (left to right)
+                    <span className="text-xs font-semibold text-foreground">1. Build Matrix</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">5×5 grid from MONARCHY</p>
+                </div>
+                
+                <div className="bg-background/60 rounded-lg p-4 border border-border/50 hover:border-purple-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded bg-gradient-to-b from-purple-500/35 to-purple-500/15 border border-purple-500 flex items-center justify-center">
+                      <span className="text-xs font-bold text-purple-400">AB</span>
                     </div>
+                    <span className="text-xs font-semibold text-foreground">2. Split Digraphs</span>
                   </div>
+                  <p className="text-xs text-muted-foreground">HE LX LO (add X)</p>
                 </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Important Notes</h4>
-                  <div className="bg-background/50 rounded-lg p-3 space-y-2 text-sm text-muted-foreground">
-                    <div><strong className="text-cyan-400">I/J Combination:</strong> Since 26 letters don't fit in 5×5 (25 cells), I and J share a cell. During encryption/decryption, J is treated as I.</div>
-                    <div><strong className="text-cyan-400">Case Insensitive:</strong> All letters are converted to uppercase before processing.</div>
-                    <div><strong className="text-cyan-400">Unique Keyword:</strong> Longer, more unique keywords create more secure matrices with less predictable letter positions.</div>
+                
+                <div className="bg-background/60 rounded-lg p-4 border border-border/50 hover:border-orange-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded bg-gradient-to-b from-orange-500/35 to-orange-500/15 border border-orange-500 flex items-center justify-center">
+                      <Grid3x3 className="w-4 h-4 text-orange-400" />
+                    </div>
+                    <span className="text-xs font-semibold text-foreground">3. Find Positions</span>
                   </div>
+                  <p className="text-xs text-muted-foreground">Locate each pair in grid</p>
                 </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Why It Matters</h4>
-                  <p className="text-sm text-muted-foreground">
-                    The key matrix arrangement determines the entire encryption. Different keywords produce different matrices, 
-                    changing how letter pairs are encrypted. This provides much stronger security than simple substitution ciphers 
-                    because the same letter can encrypt to different letters depending on its pair.
-                  </p>
+                
+                <div className="bg-background/60 rounded-lg p-4 border border-border/50 hover:border-green-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded bg-gradient-to-b from-green-500/35 to-green-500/15 border border-green-500 flex items-center justify-center">
+                      <ArrowRight className="w-4 h-4 text-green-400" />
+                    </div>
+                    <span className="text-xs font-semibold text-foreground">4. Apply Rules</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Row, column, or rectangle</p>
+                </div>
+                
+                <div className="bg-background/60 rounded-lg p-4 border border-border/50 hover:border-pink-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded bg-gradient-to-b from-pink-500/35 to-pink-500/15 border border-pink-500 flex items-center justify-center">
+                      <span className="text-xs font-bold text-pink-400">QF</span>
+                    </div>
+                    <span className="text-xs font-semibold text-foreground">5. Ciphertext</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Output encrypted pairs</p>
                 </div>
               </div>
             </div>
-          </TabsContent>
 
-          {/* Row Rule Tab */}
-          <TabsContent value="rowRule" className="space-y-4">
-            <div className="bg-gradient-to-b from-blue-500/35 to-blue-500/15 rounded-lg p-4 border-2 border-blue-500 shadow-sm shadow-blue-500/20">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded bg-blue-500/20">
-                  <ArrowRight className="w-5 h-5 text-blue-400" />
-                </div>
-                <h3 className="font-semibold text-lg text-blue-400">Same Row Rule</h3>
-              </div>
+            {/* Tabs Section - Educational Deep Dive */}
+            <Tabs defaultValue="keyMatrix" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 gap-2 h-auto p-1 bg-muted/30">
+                <TabsTrigger value="keyMatrix" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:border-cyan-500/50 flex items-center gap-2 text-xs py-2">
+                  <Key className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Key Matrix</span>
+                </TabsTrigger>
+                <TabsTrigger value="digraphs" className="data-[state=active]:bg-purple-500/20 data-[state=active]:border-purple-500/50 flex items-center gap-2 text-xs py-2">
+                  <span className="hidden sm:inline">Digraphs</span>
+                  <span className="sm:hidden">Pairs</span>
+                </TabsTrigger>
+                <TabsTrigger value="row" className="data-[state=active]:bg-orange-500/20 data-[state=active]:border-orange-500/50 flex items-center gap-2 text-xs py-2">
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Row Rule</span>
+                </TabsTrigger>
+                <TabsTrigger value="column" className="data-[state=active]:bg-green-500/20 data-[state=active]:border-green-500/50 flex items-center gap-2 text-xs py-2">
+                  <ArrowDown className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Column Rule</span>
+                </TabsTrigger>
+                <TabsTrigger value="rectangle" className="data-[state=active]:bg-blue-500/20 data-[state=active]:border-blue-500/50 flex items-center gap-2 text-xs py-2">
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Rectangle Rule</span>
+                </TabsTrigger>
+                <TabsTrigger value="history" className="data-[state=active]:bg-indigo-500/20 data-[state=active]:border-indigo-500/50 flex items-center gap-2 text-xs py-2">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">History</span>
+                </TabsTrigger>
+              </TabsList>
 
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">What It Does</h4>
-                  <p className="text-sm text-muted-foreground">
-                    When both letters of a digraph are in the same row, replace each letter with the letter immediately 
-                    to its right. If a letter is at the end of the row, wrap around to the beginning.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">How It Works</h4>
-                  <div className="space-y-3 text-sm text-muted-foreground">
-                    <div>
-                      <strong className="text-foreground">Encryption (shift right):</strong>
-                      <ol className="list-decimal list-inside ml-4 mt-1 space-y-1">
-                        <li>Identify row of first letter</li>
-                        <li>Move one position to the right</li>
-                        <li>If at row end (column 4), wrap to row start (column 0)</li>
-                        <li>Repeat for second letter</li>
-                      </ol>
+              {/* Key Matrix Tab */}
+              <TabsContent value="keyMatrix" className="mt-6 space-y-4">
+                <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl p-5 border border-cyan-500/30">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-cyan-500/35 to-cyan-500/15 border-2 border-cyan-500 flex items-center justify-center shadow-sm shadow-cyan-500/20">
+                      <Key className="w-5 h-5 text-cyan-400" />
                     </div>
-                    <div>
-                      <strong className="text-foreground">Decryption (shift left):</strong>
-                      <p className="ml-4 mt-1">Same process but shift left instead of right. Wrap from column 0 to column 4.</p>
-                    </div>
+                    <h3 className="text-lg font-bold text-cyan-400">5×5 Key Matrix Construction</h3>
                   </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Visual Example</h4>
-                  <div className="bg-background/50 rounded-lg p-4">
-                    <div className="text-xs text-muted-foreground mb-2">Matrix Row 0: P L A Y F</div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="font-mono text-sm">
-                          <span className="text-blue-400 font-bold">Plaintext:</span> <span className="bg-blue-500/20 px-2 py-1 rounded">PL</span>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="font-mono text-sm">
-                          <span className="text-green-400 font-bold">Ciphertext:</span> <span className="bg-green-500/20 px-2 py-1 rounded">LA</span>
-                        </div>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        P (col 0) → shift right → L (col 1)<br/>
-                        L (col 1) → shift right → A (col 2)
-                      </div>
+                  
+                  {/* What It Does */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-cyan-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-4 h-4 text-cyan-300" />
+                      <h4 className="font-semibold text-sm text-foreground">What It Does</h4>
                     </div>
-                    <div className="mt-4 pt-4 border-t border-border space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="font-mono text-sm">
-                          <span className="text-blue-400 font-bold">Plaintext:</span> <span className="bg-blue-500/20 px-2 py-1 rounded">YF</span>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="font-mono text-sm">
-                          <span className="text-green-400 font-bold">Ciphertext:</span> <span className="bg-green-500/20 px-2 py-1 rounded">FP</span>
-                        </div>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Y (col 3) → shift right → F (col 4)<br/>
-                        F (col 4) → shift right → <strong className="text-orange-400">wrap to P (col 0)</strong>
-                      </div>
-                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      The key matrix is a 5×5 grid filled with the alphabet (I and J share one cell) based on a keyword. 
+                      This matrix defines how each pair of letters will be encrypted.
+                    </p>
                   </div>
-                </div>
 
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Why It Matters</h4>
-                  <p className="text-sm text-muted-foreground">
-                    The row rule handles a specific geometric case in the matrix. The wraparound ensures every pair has 
-                    a valid encryption, preventing edge cases. This simple shift operation maintains the digraphic nature 
-                    of the cipher while being easy to implement manually.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* Column Rule Tab */}
-          <TabsContent value="colRule" className="space-y-4">
-            <div className="bg-gradient-to-b from-purple-500/35 to-purple-500/15 rounded-lg p-4 border-2 border-purple-500 shadow-sm shadow-purple-500/20">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded bg-purple-500/20">
-                  <ArrowDown className="w-5 h-5 text-purple-400" />
-                </div>
-                <h3 className="font-semibold text-lg text-purple-400">Same Column Rule</h3>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">What It Does</h4>
-                  <p className="text-sm text-muted-foreground">
-                    When both letters of a digraph are in the same column, replace each letter with the letter immediately 
-                    below it. If a letter is at the bottom of the column, wrap around to the top.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">How It Works</h4>
-                  <div className="space-y-3 text-sm text-muted-foreground">
-                    <div>
-                      <strong className="text-foreground">Encryption (shift down):</strong>
-                      <ol className="list-decimal list-inside ml-4 mt-1 space-y-1">
-                        <li>Identify column of first letter</li>
-                        <li>Move one position down</li>
-                        <li>If at column bottom (row 4), wrap to column top (row 0)</li>
-                        <li>Repeat for second letter</li>
-                      </ol>
+                  {/* How It Works */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-cyan-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <ListOrdered className="w-4 h-4 text-cyan-300" />
+                      <h4 className="font-semibold text-sm text-foreground">How to Build (Keyword: MONARCHY)</h4>
                     </div>
-                    <div>
-                      <strong className="text-foreground">Decryption (shift up):</strong>
-                      <p className="ml-4 mt-1">Same process but shift up instead of down. Wrap from row 0 to row 4.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Visual Example</h4>
-                  <div className="bg-background/50 rounded-lg p-4">
-                    <div className="text-xs text-muted-foreground mb-2">Matrix Column 0: P I/J E N U</div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="font-mono text-sm">
-                          <span className="text-purple-400 font-bold">Plaintext:</span> <span className="bg-purple-500/20 px-2 py-1 rounded">PI</span>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="font-mono text-sm">
-                          <span className="text-green-400 font-bold">Ciphertext:</span> <span className="bg-green-500/20 px-2 py-1 rounded">IE</span>
-                        </div>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        P (row 0) → shift down → I/J (row 1)<br/>
-                        I/J (row 1) → shift down → E (row 2)
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-border space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="font-mono text-sm">
-                          <span className="text-purple-400 font-bold">Plaintext:</span> <span className="bg-purple-500/20 px-2 py-1 rounded">NU</span>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="font-mono text-sm">
-                          <span className="text-green-400 font-bold">Ciphertext:</span> <span className="bg-green-500/20 px-2 py-1 rounded">UP</span>
-                        </div>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        N (row 3) → shift down → U (row 4)<br/>
-                        U (row 4) → shift down → <strong className="text-orange-400">wrap to P (row 0)</strong>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Why It Matters</h4>
-                  <p className="text-sm text-muted-foreground">
-                    The column rule complements the row rule, handling the second geometric alignment case. Together with the row rule, 
-                    these cover all situations where digraph letters share either a row or column, ensuring complete coverage of the matrix structure.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* Rectangle Rule Tab */}
-          <TabsContent value="rectRule" className="space-y-4">
-            <div className="bg-gradient-to-b from-orange-500/35 to-orange-500/15 rounded-lg p-4 border-2 border-orange-500 shadow-sm shadow-orange-500/20">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded bg-orange-500/20">
-                  <Maximize2 className="w-5 h-5 text-orange-400" />
-                </div>
-                <h3 className="font-semibold text-lg text-orange-400">Rectangle Rule</h3>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">What It Does</h4>
-                  <p className="text-sm text-muted-foreground">
-                    When the two letters form opposite corners of a rectangle (different rows AND different columns), 
-                    replace each letter with the letter in the same row but the other letter's column. This "swaps" the columns.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">How It Works</h4>
-                  <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                    <li><strong>Locate both letters:</strong> Find positions (row₁, col₁) and (row₂, col₂)</li>
-                    <li><strong>Form rectangle:</strong> The letters are at opposite corners</li>
-                    <li><strong>Swap columns:</strong>
-                      <ul className="list-disc list-inside ml-6 mt-1">
-                        <li>First letter: take letter at (row₁, col₂)</li>
-                        <li>Second letter: take letter at (row₂, col₁)</li>
-                      </ul>
-                    </li>
-                    <li><strong>Same rule for encryption and decryption:</strong> Rectangle rule is self-inverse</li>
-                  </ol>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Visual Example</h4>
-                  <div className="bg-background/50 rounded-lg p-4 space-y-4">
-                    <div>
-                      <div className="text-xs text-muted-foreground mb-2">MONARCHY Matrix excerpt (rows 0-2):</div>
-                      <div className="grid grid-cols-5 gap-1 max-w-[200px] font-mono text-xs">
-                        {["M", "O", "N", "A", "R", "C", "H", "B", "D", "E", "F", "G", "I", "K", "L"].map((letter, idx) => (
-                          <div key={idx} className={`aspect-square flex items-center justify-center rounded border ${
-                            letter === "A" || letter === "H" ? "bg-orange-500/30 border-orange-400 font-bold text-orange-300" :
-                            letter === "O" || letter === "D" ? "bg-green-500/30 border-green-400 font-bold text-green-300" :
-                            "bg-background/50 border-border text-muted-foreground"
-                          }`}>
-                            {letter}
+                    <ol className="list-decimal list-inside space-y-2 text-xs text-muted-foreground">
+                      <li><strong className="text-foreground">Write keyword:</strong> M O N A R C H Y</li>
+                      <li><strong className="text-foreground">Remove duplicates:</strong> M O N A R C H Y (no duplicates)</li>
+                      <li><strong className="text-foreground">Fill remaining alphabet:</strong> Add B D E F G I/J K L P Q S T U V W X Z</li>
+                      <li><strong className="text-foreground">Arrange in 5×5 grid:</strong>
+                        <div className="bg-muted/30 rounded p-3 mt-2 font-mono text-xs border border-cyan-500/20">
+                          <div className="grid grid-cols-5 gap-2 text-center">
+                            <div className="border border-cyan-500/30 rounded p-2 bg-cyan-500/10">M</div>
+                            <div className="border border-cyan-500/30 rounded p-2 bg-cyan-500/10">O</div>
+                            <div className="border border-cyan-500/30 rounded p-2 bg-cyan-500/10">N</div>
+                            <div className="border border-cyan-500/30 rounded p-2 bg-cyan-500/10">A</div>
+                            <div className="border border-cyan-500/30 rounded p-2 bg-cyan-500/10">R</div>
+                            <div className="border border-border/30 rounded p-2">C</div>
+                            <div className="border border-border/30 rounded p-2">H</div>
+                            <div className="border border-border/30 rounded p-2">Y</div>
+                            <div className="border border-border/30 rounded p-2">B</div>
+                            <div className="border border-border/30 rounded p-2">D</div>
+                            <div className="border border-border/30 rounded p-2">E</div>
+                            <div className="border border-border/30 rounded p-2">F</div>
+                            <div className="border border-border/30 rounded p-2">G</div>
+                            <div className="border border-border/30 rounded p-2">I/J</div>
+                            <div className="border border-border/30 rounded p-2">K</div>
+                            <div className="border border-border/30 rounded p-2">L</div>
+                            <div className="border border-border/30 rounded p-2">P</div>
+                            <div className="border border-border/30 rounded p-2">Q</div>
+                            <div className="border border-border/30 rounded p-2">S</div>
+                            <div className="border border-border/30 rounded p-2">T</div>
+                            <div className="border border-border/30 rounded p-2">U</div>
+                            <div className="border border-border/30 rounded p-2">V</div>
+                            <div className="border border-border/30 rounded p-2">W</div>
+                            <div className="border border-border/30 rounded p-2">X</div>
+                            <div className="border border-border/30 rounded p-2">Z</div>
                           </div>
-                        ))}
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+
+                  {/* I/J Merging */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-cyan-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Binary className="w-4 h-4 text-cyan-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Why I/J Merge?</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+                      The English alphabet has 26 letters, but a 5×5 grid holds only 25 cells. 
+                      Historically, I and J were considered variants of the same letter, so they share a cell.
+                    </p>
+                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded p-2 text-xs text-muted-foreground">
+                      <strong className="text-yellow-400">Tip:</strong> When decrypting, context determines whether to use I or J.
+                    </div>
+                  </div>
+
+                  {/* Why It Matters */}
+                  <div className="bg-background/60 rounded-lg p-4 border border-cyan-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="w-4 h-4 text-cyan-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Why It Matters</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      The keyword makes the matrix unique. Different keywords create different letter arrangements, 
+                      so the same plaintext produces different ciphertext. This is the "key" that must be kept secret.
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Digraphs Tab */}
+              <TabsContent value="digraphs" className="mt-6 space-y-4">
+                <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-5 border border-purple-500/30">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-purple-500/35 to-purple-500/15 border-2 border-purple-500 flex items-center justify-center shadow-sm shadow-purple-500/20">
+                      <Grid3x3 className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-purple-400">Digraph Preparation</h3>
+                  </div>
+                  
+                  {/* What It Does */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-purple-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-4 h-4 text-purple-300" />
+                      <h4 className="font-semibold text-sm text-foreground">What It Does</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Playfair encrypts pairs of letters (digraphs) rather than single letters. 
+                      The plaintext must be split into two-letter groups following specific rules.
+                    </p>
+                  </div>
+
+                  {/* How It Works */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-purple-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <ListOrdered className="w-4 h-4 text-purple-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Digraph Rules</h4>
+                    </div>
+                    <ol className="list-decimal list-inside space-y-3 text-xs text-muted-foreground">
+                      <li><strong className="text-foreground">Remove spaces and punctuation:</strong>
+                        <div className="bg-muted/30 rounded p-2 mt-1 font-mono text-xs border border-purple-500/20">
+                          "HELLO WORLD" → "HELLOWORLD"
+                        </div>
+                      </li>
+                      <li><strong className="text-foreground">Replace J with I:</strong>
+                        <div className="bg-muted/30 rounded p-2 mt-1 font-mono text-xs border border-purple-500/20">
+                          "JUMP" → "IUMP"
+                        </div>
+                      </li>
+                      <li><strong className="text-foreground">Split into pairs:</strong>
+                        <div className="bg-muted/30 rounded p-2 mt-1 font-mono text-xs border border-purple-500/20">
+                          "HELLO" → "HE LL O?"
+                        </div>
+                      </li>
+                      <li><strong className="text-foreground">Insert X between double letters:</strong>
+                        <div className="bg-muted/30 rounded p-2 mt-1 font-mono text-xs border border-purple-500/20">
+                          "LL" → "LX L"<br/>
+                          Result: "HE LX LO"
+                        </div>
+                      </li>
+                      <li><strong className="text-foreground">Add X if odd number of letters:</strong>
+                        <div className="bg-muted/30 rounded p-2 mt-1 font-mono text-xs border border-purple-500/20">
+                          "HELLO" (5 letters) → "HE LX LO" → "HE LX LO X" (even pairs)
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+
+                  {/* Complete Example */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-purple-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Binary className="w-4 h-4 text-purple-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Complete Example</h4>
+                    </div>
+                    <div className="space-y-2 text-xs font-mono bg-muted/30 rounded p-3 border border-purple-500/20">
+                      <div><span className="text-purple-400">Input:</span> "BALLOON"</div>
+                      <div><span className="text-purple-400">Step 1:</span> Remove spaces → "BALLOON"</div>
+                      <div><span className="text-purple-400">Step 2:</span> Replace J → "BALLOON" (no J)</div>
+                      <div><span className="text-purple-400">Step 3:</span> Split → "BA LL OO N?"</div>
+                      <div><span className="text-purple-400">Step 4:</span> Insert X for doubles → "BA LX LO OX N?"</div>
+                      <div><span className="text-purple-400">Step 5:</span> Add X at end → "BA LX LO OX NX"</div>
+                      <div className="mt-2 pt-2 border-t border-border text-green-400">
+                        Final digraphs: BA / LX / LO / OX / NX
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="font-mono text-sm">
-                          <span className="text-orange-400 font-bold">Plaintext:</span> <span className="bg-orange-500/20 px-2 py-1 rounded">AH</span>
+                  </div>
+
+                  {/* Why It Matters */}
+                  <div className="bg-background/60 rounded-lg p-4 border border-purple-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="w-4 h-4 text-purple-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Why It Matters</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Encrypting pairs instead of single letters obscures letter frequency patterns that can break simple substitution ciphers. 
+                      The digraph preparation rules ensure consistent encryption and successful decryption.
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Row Rule Tab */}
+              <TabsContent value="row" className="mt-6 space-y-4">
+                <div className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 rounded-xl p-5 border border-orange-500/30">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-orange-500/35 to-orange-500/15 border-2 border-orange-500 flex items-center justify-center shadow-sm shadow-orange-500/20">
+                      <ArrowRight className="w-5 h-5 text-orange-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-orange-400">Row Rule</h3>
+                  </div>
+                  
+                  {/* What It Does */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-orange-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-4 h-4 text-orange-300" />
+                      <h4 className="font-semibold text-sm text-foreground">What It Does</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      When both letters of a digraph are in the same row, replace each with the letter to its right (wrapping around).
+                    </p>
+                  </div>
+
+                  {/* How It Works */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-orange-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <ListOrdered className="w-4 h-4 text-orange-300" />
+                      <h4 className="font-semibold text-sm text-foreground">How It Works</h4>
+                    </div>
+                    <div className="space-y-3 text-xs">
+                      <div>
+                        <strong className="text-foreground">Rule:</strong>
+                        <p className="text-muted-foreground mt-1">
+                          Each letter shifts one position to the right. The rightmost letter wraps to the leftmost position of the same row.
+                        </p>
+                      </div>
+                      <div>
+                        <strong className="text-foreground">Example with MONARCHY matrix:</strong>
+                        <div className="bg-muted/30 rounded p-3 mt-2 font-mono text-xs border border-orange-500/20">
+                          <div className="mb-2 text-muted-foreground">Row 0: M O N A R</div>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-orange-400">Digraph "AR":</span>
+                              <span className="text-muted-foreground">A is at [0,3], R is at [0,4]</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <ArrowRight className="w-3 h-3 text-orange-400" />
+                              <span className="text-muted-foreground">A → R (shift right)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <ArrowRight className="w-3 h-3 text-orange-400" />
+                              <span className="text-muted-foreground">R → M (wrap around)</span>
+                            </div>
+                            <div className="mt-2 pt-2 border-t border-border text-green-400">
+                              Result: "AR" → "RM"
+                            </div>
+                          </div>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                        <div className="font-mono text-sm">
-                          <span className="text-green-400 font-bold">Ciphertext:</span> <span className="bg-green-500/20 px-2 py-1 rounded">OD</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visual Demo */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-orange-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Binary className="w-4 h-4 text-orange-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Visual Demonstration</h4>
+                    </div>
+                    <div className="bg-muted/30 rounded p-3 border border-orange-500/20">
+                      <div className="grid grid-cols-5 gap-2 text-center text-xs font-mono">
+                        <div className="border border-orange-500/30 rounded p-2 bg-orange-500/10">M</div>
+                        <div className="border border-orange-500/30 rounded p-2 bg-orange-500/10">O</div>
+                        <div className="border border-orange-500/30 rounded p-2 bg-orange-500/10">N</div>
+                        <div className="border border-green-500/50 rounded p-2 bg-green-500/20 font-bold">A</div>
+                        <div className="border border-blue-500/50 rounded p-2 bg-blue-500/20 font-bold">R</div>
+                      </div>
+                      <div className="flex items-center justify-center gap-2 my-2">
+                        <ArrowDown className="w-4 h-4 text-orange-400" />
+                      </div>
+                      <div className="grid grid-cols-5 gap-2 text-center text-xs font-mono">
+                        <div className="border border-orange-500/30 rounded p-2 bg-orange-500/10">M</div>
+                        <div className="border border-orange-500/30 rounded p-2 bg-orange-500/10">O</div>
+                        <div className="border border-orange-500/30 rounded p-2 bg-orange-500/10">N</div>
+                        <div className="border border-blue-500/50 rounded p-2 bg-blue-500/20 font-bold">R</div>
+                        <div className="border border-green-500/50 rounded p-2 bg-green-500/20 font-bold">M</div>
+                      </div>
+                      <div className="mt-3 text-center text-xs text-muted-foreground">
+                        A shifts right to R, R wraps around to M
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Why It Matters */}
+                  <div className="bg-background/60 rounded-lg p-4 border border-orange-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="w-4 h-4 text-orange-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Why It Matters</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      The row rule provides a simple, deterministic transformation that can be easily reversed during decryption 
+                      (shift left instead of right). The wrap-around ensures all positions are used.
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Column Rule Tab */}
+              <TabsContent value="column" className="mt-6 space-y-4">
+                <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl p-5 border border-green-500/30">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-green-500/35 to-green-500/15 border-2 border-green-500 flex items-center justify-center shadow-sm shadow-green-500/20">
+                      <ArrowDown className="w-5 h-5 text-green-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-green-400">Column Rule</h3>
+                  </div>
+                  
+                  {/* What It Does */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-green-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-4 h-4 text-green-300" />
+                      <h4 className="font-semibold text-sm text-foreground">What It Does</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      When both letters of a digraph are in the same column, replace each with the letter directly below it (wrapping around).
+                    </p>
+                  </div>
+
+                  {/* How It Works */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-green-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <ListOrdered className="w-4 h-4 text-green-300" />
+                      <h4 className="font-semibold text-sm text-foreground">How It Works</h4>
+                    </div>
+                    <div className="space-y-3 text-xs">
+                      <div>
+                        <strong className="text-foreground">Rule:</strong>
+                        <p className="text-muted-foreground mt-1">
+                          Each letter shifts one position down. The bottom letter wraps to the top position of the same column.
+                        </p>
+                      </div>
+                      <div>
+                        <strong className="text-foreground">Example with MONARCHY matrix:</strong>
+                        <div className="bg-muted/30 rounded p-3 mt-2 font-mono text-xs border border-green-500/20">
+                          <div className="mb-2 text-muted-foreground">Column 0: M C E L U</div>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-green-400">Digraph "ME":</span>
+                              <span className="text-muted-foreground">M is at [0,0], E is at [2,0]</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <ArrowDown className="w-3 h-3 text-green-400" />
+                              <span className="text-muted-foreground">M → C (shift down)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <ArrowDown className="w-3 h-3 text-green-400" />
+                              <span className="text-muted-foreground">E → L (shift down)</span>
+                            </div>
+                            <div className="mt-2 pt-2 border-t border-border text-green-400">
+                              Result: "ME" → "CL"
+                            </div>
+                          </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visual Demo */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-green-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Binary className="w-4 h-4 text-green-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Visual Demonstration</h4>
+                    </div>
+                    <div className="bg-muted/30 rounded p-3 border border-green-500/20">
+                      <div className="flex gap-8 justify-center">
+                        <div>
+                          <div className="text-xs text-center text-muted-foreground mb-2">Before</div>
+                          <div className="space-y-2">
+                            <div className="border border-green-500/50 rounded p-2 bg-green-500/20 text-xs font-mono w-12 text-center font-bold">M</div>
+                            <div className="border border-green-500/30 rounded p-2 bg-green-500/10 text-xs font-mono w-12 text-center">C</div>
+                            <div className="border border-blue-500/50 rounded p-2 bg-blue-500/20 text-xs font-mono w-12 text-center font-bold">E</div>
+                            <div className="border border-green-500/30 rounded p-2 bg-green-500/10 text-xs font-mono w-12 text-center">L</div>
+                            <div className="border border-green-500/30 rounded p-2 bg-green-500/10 text-xs font-mono w-12 text-center">U</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <ArrowRight className="w-6 h-6 text-green-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-center text-muted-foreground mb-2">After</div>
+                          <div className="space-y-2">
+                            <div className="border border-green-500/30 rounded p-2 bg-green-500/10 text-xs font-mono w-12 text-center">M</div>
+                            <div className="border border-green-500/50 rounded p-2 bg-green-500/20 text-xs font-mono w-12 text-center font-bold">C</div>
+                            <div className="border border-green-500/30 rounded p-2 bg-green-500/10 text-xs font-mono w-12 text-center">E</div>
+                            <div className="border border-blue-500/50 rounded p-2 bg-blue-500/20 text-xs font-mono w-12 text-center font-bold">L</div>
+                            <div className="border border-green-500/30 rounded p-2 bg-green-500/10 text-xs font-mono w-12 text-center">U</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-3 text-center text-xs text-muted-foreground">
+                        M shifts down to C, E shifts down to L
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Why It Matters */}
+                  <div className="bg-background/60 rounded-lg p-4 border border-green-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="w-4 h-4 text-green-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Why It Matters</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Like the row rule, the column rule provides deterministic, reversible encryption. 
+                      Together, these rules ensure that letters in the same row or column are handled consistently.
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Rectangle Rule Tab */}
+              <TabsContent value="rectangle" className="mt-6 space-y-4">
+                <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl p-5 border border-blue-500/30">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-blue-500/35 to-blue-500/15 border-2 border-blue-500 flex items-center justify-center shadow-sm shadow-blue-500/20">
+                      <Maximize2 className="w-5 h-5 text-blue-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-blue-400">Rectangle Rule</h3>
+                  </div>
+                  
+                  {/* What It Does */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-blue-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-4 h-4 text-blue-300" />
+                      <h4 className="font-semibold text-sm text-foreground">What It Does</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      When letters are in different rows AND different columns, they form opposite corners of a rectangle. 
+                      Replace each letter with the one on the same row but in the other letter's column.
+                    </p>
+                  </div>
+
+                  {/* How It Works */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-blue-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <ListOrdered className="w-4 h-4 text-blue-300" />
+                      <h4 className="font-semibold text-sm text-foreground">How It Works</h4>
+                    </div>
+                    <div className="space-y-3 text-xs">
+                      <div>
+                        <strong className="text-foreground">Rule:</strong>
+                        <p className="text-muted-foreground mt-1">
+                          Each letter moves horizontally to the column of the other letter, creating a rectangle transformation.
+                        </p>
+                      </div>
+                      <div>
+                        <strong className="text-foreground">Example with MONARCHY matrix:</strong>
+                        <div className="bg-muted/30 rounded p-3 mt-2 font-mono text-xs border border-blue-500/20">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-blue-400">Digraph "HE":</span>
+                            </div>
+                            <div className="text-muted-foreground">
+                              H is at [1,1] (row 1, col 1)<br/>
+                              E is at [2,0] (row 2, col 0)
+                            </div>
+                            <div className="mt-2 p-2 bg-background/50 rounded">
+                              <div className="text-blue-400 mb-1">Rectangle corners:</div>
+                              <div className="grid grid-cols-2 gap-2 text-center">
+                                <div className="border border-green-500/50 rounded p-1 bg-green-500/20">H [1,1]</div>
+                                <div className="border border-blue-500/50 rounded p-1 bg-blue-500/20">? [1,0]</div>
+                                <div className="border border-orange-500/50 rounded p-1 bg-orange-500/20">? [2,1]</div>
+                                <div className="border border-purple-500/50 rounded p-1 bg-purple-500/20">E [2,0]</div>
+                              </div>
+                            </div>
+                            <div className="mt-2 pt-2 border-t border-border">
+                              <ArrowRight className="w-3 h-3 inline text-blue-400 mr-1" />
+                              <span className="text-muted-foreground">H [1,1] → C [1,0] (same row, E's column)</span>
+                            </div>
+                            <div>
+                              <ArrowRight className="w-3 h-3 inline text-blue-400 mr-1" />
+                              <span className="text-muted-foreground">E [2,0] → F [2,1] (same row, H's column)</span>
+                            </div>
+                            <div className="mt-2 pt-2 border-t border-border text-green-400">
+                              Result: "HE" → "CF"
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visual Demo */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-blue-500/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Binary className="w-4 h-4 text-blue-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Visual Demonstration</h4>
+                    </div>
+                    <div className="bg-muted/30 rounded p-3 border border-blue-500/20">
+                      <div className="text-xs text-center text-muted-foreground mb-3">MONARCHY Matrix (relevant section)</div>
+                      <div className="grid grid-cols-5 gap-2 text-center text-xs font-mono mb-2">
+                        <div className="border border-border/30 rounded p-2">M</div>
+                        <div className="border border-border/30 rounded p-2">O</div>
+                        <div className="border border-border/30 rounded p-2">N</div>
+                        <div className="border border-border/30 rounded p-2">A</div>
+                        <div className="border border-border/30 rounded p-2">R</div>
+                        <div className="border border-blue-500/50 rounded p-2 bg-blue-500/20 font-bold">C</div>
+                        <div className="border border-green-500/50 rounded p-2 bg-green-500/20 font-bold">H</div>
+                        <div className="border border-border/30 rounded p-2">Y</div>
+                        <div className="border border-border/30 rounded p-2">B</div>
+                        <div className="border border-border/30 rounded p-2">D</div>
+                        <div className="border border-purple-500/50 rounded p-2 bg-purple-500/20 font-bold">E</div>
+                        <div className="border border-orange-500/50 rounded p-2 bg-orange-500/20 font-bold">F</div>
+                        <div className="border border-border/30 rounded p-2">G</div>
+                        <div className="border border-border/30 rounded p-2">I/J</div>
+                        <div className="border border-border/30 rounded p-2">K</div>
                       </div>
                       <div className="text-xs text-muted-foreground space-y-1">
-                        <div>A at (row 0, col 3) → take (row 0, col 1) = <strong className="text-green-400">O</strong></div>
-                        <div>H at (row 1, col 1) → take (row 1, col 3) = <strong className="text-green-400">D</strong></div>
-                        <div className="mt-2 pt-2 border-t border-border text-orange-400">
-                          Rectangle corners: A(0,3) and H(1,1)<br/>
-                          Other corners: O(0,1) and D(1,3) form the ciphertext
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded bg-green-500/20 border border-green-500/50"></div>
+                          <span>H [1,1] swaps column with E → C [1,0]</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded bg-purple-500/20 border border-purple-500/50"></div>
+                          <span>E [2,0] swaps column with H → F [2,1]</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Self-Inverse Property</h4>
-                  <div className="bg-background/50 rounded-lg p-3 text-sm text-muted-foreground">
-                    <p className="mb-2">The rectangle rule is <strong className="text-orange-400">self-inverse</strong>:</p>
-                    <div className="font-mono text-xs space-y-1">
-                      <div>AH → OD (encryption)</div>
-                      <div>OD → AH (decryption, same operation!)</div>
+                  {/* Why It Matters */}
+                  <div className="bg-background/60 rounded-lg p-4 border border-blue-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="w-4 h-4 text-blue-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Why It Matters</h4>
                     </div>
-                    <p className="mt-2">
-                      This elegant property means the same rule works for both encryption and decryption, 
-                      simplifying implementation and mental calculation.
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      The rectangle rule is the most common case (neither same row nor same column). 
+                      It creates complex substitution patterns that differ based on the keyword, 
+                      providing the primary security of Playfair Cipher. This rule is self-inverse: 
+                      applying it twice returns the original letters.
                     </p>
                   </div>
                 </div>
+              </TabsContent>
 
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Why It Matters</h4>
-                  <p className="text-sm text-muted-foreground">
-                    The rectangle rule handles the most common case (letters in different rows and columns) and provides 
-                    the most confusion in the cipher. The column swap creates a non-obvious transformation that's difficult 
-                    to predict without knowing the key matrix, significantly strengthening security.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* Security Tab */}
-          <TabsContent value="security" className="space-y-4">
-            <div className="bg-gradient-to-b from-red-500/35 to-red-500/15 rounded-lg p-4 border-2 border-red-500 shadow-sm shadow-red-500/20">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded bg-red-500/20">
-                  <Shield className="w-5 h-5 text-red-400" />
-                </div>
-                <h3 className="font-semibold text-lg text-red-400">Security Analysis</h3>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Strengths Over Simple Substitution</h4>
-                  <div className="bg-background/50 rounded-lg p-3 space-y-2 text-sm text-muted-foreground">
-                    <div><strong className="text-green-400">Digraphic Encryption:</strong> Encrypts letter pairs, not individual letters, obscuring single-letter frequency analysis</div>
-                    <div><strong className="text-green-400">Polyalphabetic Effect:</strong> Same letter can encrypt differently (E in "HE" vs "BE"), appearing in different positions</div>
-                    <div><strong className="text-green-400">26² = 676 digraphs:</strong> vs 26 single letters, provides more complexity</div>
-                    <div><strong className="text-green-400">Keyword Security:</strong> Unknown keyword makes the 5×5 matrix arrangement secret</div>
+              {/* History Tab */}
+              <TabsContent value="history" className="mt-6 space-y-4">
+                <div className="bg-gradient-to-br from-indigo-500/10 to-violet-500/10 rounded-xl p-5 border border-indigo-500/30">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-indigo-500/35 to-indigo-500/15 border-2 border-indigo-500 flex items-center justify-center shadow-sm shadow-indigo-500/20">
+                      <BookOpen className="w-5 h-5 text-indigo-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-indigo-400">Historical Context & Legacy</h3>
                   </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Vulnerabilities</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-red-400">Digraph Frequency Analysis:</strong>
-                      <p className="text-muted-foreground mt-1">
-                        Common digraphs like "TH", "HE", "AN" still have recognizable patterns. With sufficient ciphertext, 
-                        attackers can identify frequent digraph patterns and deduce the key matrix structure.
-                      </p>
-                      <div className="text-xs mt-2 text-muted-foreground">
-                        English digraph frequencies: TH (3.2%), HE (2.7%), AN (1.9%), ER (1.8%)
+                  
+                  {/* Origins */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-indigo-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-4 h-4 text-indigo-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Origins</h4>
+                    </div>
+                    <div className="space-y-2 text-xs text-muted-foreground">
+                      <div className="bg-background/50 rounded p-3">
+                        <strong className="text-indigo-400">1854:</strong> Charles Wheatstone (inventor of the telegraph) created the cipher but never published it
+                      </div>
+                      <div className="bg-background/50 rounded p-3">
+                        <strong className="text-indigo-400">1854:</strong> Lord Lyon Playfair promoted the cipher to the British Foreign Office, giving it his name
+                      </div>
+                      <div className="bg-background/50 rounded p-3">
+                        <strong className="text-indigo-400">Context:</strong> First practical digraph cipher - encrypts letter pairs instead of single letters
                       </div>
                     </div>
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-orange-400">Known Plaintext Attack:</strong>
-                      <p className="text-muted-foreground mt-1">
-                        If attacker knows some plaintext-ciphertext pairs, they can deduce portions of the key matrix. 
-                        With enough pairs (typically 25-50 digraphs), the entire matrix can be reconstructed.
-                      </p>
+                  </div>
+
+                  {/* Military Usage */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-indigo-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <ListOrdered className="w-4 h-4 text-indigo-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Military Usage</h4>
                     </div>
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-yellow-400">Limited Key Space:</strong>
-                      <p className="text-muted-foreground mt-1">
-                        25! ≈ 1.5×10²⁵ possible matrix arrangements seems large, but many are equivalent due to symmetries. 
-                        Effective key space much smaller, vulnerable to modern computing power.
-                      </p>
-                    </div>
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-purple-400">X Padding Artifacts:</strong>
-                      <p className="text-muted-foreground mt-1">
-                        Inserted X characters for duplicate letters create recognizable patterns. Decrypted text retains X padding 
-                        (e.g., "BALLOON" → "BALXLOON"), providing clues about the original structure.
-                      </p>
-                    </div>
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-blue-400">Short Messages Weakness:</strong>
-                      <p className="text-muted-foreground mt-1">
-                        Playfair requires reasonable message length for security. Very short messages (&lt; 20 characters) 
-                        don't provide enough statistical variation to hide patterns.
-                      </p>
+                    <div className="space-y-2 text-xs text-muted-foreground">
+                      <div className="bg-background/50 rounded p-3">
+                        <strong className="text-indigo-400">Boer War (1899-1902):</strong> British forces used Playfair for tactical communications
+                      </div>
+                      <div className="bg-background/50 rounded p-3">
+                        <strong className="text-indigo-400">World War I (1914-1918):</strong> Extensively used by British forces despite known weaknesses
+                      </div>
+                      <div className="bg-background/50 rounded p-3">
+                        <strong className="text-indigo-400">World War II (1939-1945):</strong> Used by some military units and resistance groups for field communications
+                      </div>
+                      <div className="bg-background/50 rounded p-3">
+                        <strong className="text-indigo-400">1918:</strong> French cryptanalyst Georges Painvin broke German ADFGVX cipher (based on Playfair + transposition)
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Historical Effectiveness</h4>
-                  <div className="bg-background/50 rounded-lg p-3 text-sm text-muted-foreground">
-                    <p className="mb-2">
-                      Playfair was considered secure and practical for tactical military communications (WWI) because:
-                    </p>
-                    <ul className="list-disc list-inside space-y-1 ml-4">
-                      <li>Could be performed manually in the field without machines</li>
-                      <li>Faster than more complex ciphers like Hill Cipher</li>
-                      <li>Resistant to casual cryptanalysis without frequency analysis knowledge</li>
-                      <li>Short tactical messages didn't provide enough ciphertext for statistical attacks</li>
+                  {/* Why Playfair? */}
+                  <div className="bg-background/60 rounded-lg p-4 mb-4 border border-indigo-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Binary className="w-4 h-4 text-indigo-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Why It Was Popular</h4>
+                    </div>
+                    <ul className="list-disc list-inside space-y-1 text-xs text-muted-foreground ml-4">
+                      <li><strong className="text-indigo-400">Manual Implementation:</strong> Could be used with just paper and pencil</li>
+                      <li><strong className="text-indigo-400">Memorizable Key:</strong> Single keyword instead of full 26-letter substitution</li>
+                      <li><strong className="text-indigo-400">Digraphic Security:</strong> Resisted simple frequency analysis</li>
+                      <li><strong className="text-indigo-400">Speed:</strong> Faster than more complex ciphers for field use</li>
+                      <li><strong className="text-indigo-400">No Special Equipment:</strong> No codebooks or machines required</li>
                     </ul>
                   </div>
-                </div>
 
-                <div className="bg-red-500/20 border-2 border-red-500 rounded-lg p-3">
-                  <h4 className="font-semibold text-sm text-red-400 mb-2">⚠️ Modern Perspective</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Playfair is <strong className="text-red-400">completely insecure</strong> by modern standards. 
-                    Automated cryptanalysis tools can break it in seconds with sufficient ciphertext. 
-                    Use only for educational purposes to understand digraphic encryption and historical cryptography.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* History Tab */}
-          <TabsContent value="history" className="space-y-4">
-            <div className="bg-gradient-to-b from-indigo-500/35 to-indigo-500/15 rounded-lg p-4 border-2 border-indigo-500 shadow-sm shadow-indigo-500/20">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded bg-indigo-500/20">
-                  <BookOpen className="w-5 h-5 text-indigo-400" />
-                </div>
-                <h3 className="font-semibold text-lg text-indigo-400">Historical Context & Legacy</h3>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Origins & Name</h4>
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-indigo-400">1854:</strong> Sir Charles Wheatstone invented the cipher at Stonyhurst College, Lancashire
+                  {/* Fun Facts */}
+                  <div className="bg-background/60 rounded-lg p-4 border border-indigo-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="w-4 h-4 text-indigo-300" />
+                      <h4 className="font-semibold text-sm text-foreground">Fun Facts</h4>
                     </div>
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-indigo-400">Naming:</strong> Lord Lyon Playfair, 1st Baron Playfair, promoted the cipher to the British Foreign Office. 
-                      Despite Wheatstone's invention, it became known as the "Playfair Cipher"
-                    </div>
-                    <div className="bg-background/50 rounded-lg p-3">
-                      <strong className="text-indigo-400">Wheatstone's Modesty:</strong> Charles Wheatstone insisted Lord Playfair take credit, 
-                      demonstrating Victorian-era scientific courtesy (though creating lasting historical confusion!)
+                    <div className="space-y-2 text-xs text-muted-foreground">
+                      <div>📖 Lord Playfair never claimed credit - he always attributed it to Wheatstone</div>
+                      <div>🎖️ British rejected the cipher initially, saying "it would never be used by our military"</div>
+                      <div>💀 Zimmermann Telegram (1917) used a more complex system, but Playfair was still in active use</div>
+                      <div>🔍 By 1915, cryptanalysts could break Playfair with enough ciphertext (~50 letters)</div>
+                      <div>📚 Still taught today as an introduction to polygraphic substitution</div>
                     </div>
                   </div>
                 </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Key Historical Figures</h4>
-                  <div className="bg-background/50 rounded-lg p-3 space-y-3 text-sm text-muted-foreground">
-                    <div>
-                      <strong className="text-indigo-400">Sir Charles Wheatstone (1802-1875):</strong>
-                      <p>English scientist and inventor, also known for the Wheatstone bridge (electrical measurement) and contributions to telegraphy. 
-                      His cipher was one of the first practical digraphic substitution ciphers.</p>
-                    </div>
-                    <div>
-                      <strong className="text-indigo-400">Lord Playfair (1818-1898):</strong>
-                      <p>British scientist and politician who served as Postmaster General. Recognized the cipher's military potential 
-                      and successfully advocated for its adoption by the British government.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Military Usage</h4>
-                  <div className="bg-background/50 rounded-lg p-3 space-y-2 text-sm text-muted-foreground">
-                    <div><strong className="text-green-400">Boer War (1899-1902):</strong> First documented military use by British forces in South Africa</div>
-                    <div><strong className="text-green-400">World War I (1914-1918):</strong> Extensively used by British forces for tactical field communications</div>
-                    <div><strong className="text-green-400">World War II (1939-1945):</strong> Still used for low-level tactical messages, though largely replaced by machine ciphers (Enigma, etc.)</div>
-                    <div className="mt-2 pt-2 border-t border-border">
-                      <strong className="text-yellow-400">Why it worked for military:</strong> Simple enough to use in the field without equipment, 
-                      secure enough for short tactical messages that would be obsolete within hours.
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Notable Historical Incidents</h4>
-                  <div className="bg-background/50 rounded-lg p-3 space-y-2 text-sm text-muted-foreground">
-                    <div>
-                      <strong className="text-orange-400">JFK Assassination (1963):</strong> 
-                      According to some theories, a Playfair-encrypted message was found among Lee Harvey Oswald's possessions, 
-                      though this remains unverified and disputed.
-                    </div>
-                    <div>
-                      <strong className="text-orange-400">British Special Forces:</strong> 
-                      Used as backup cipher by British SAS and other special forces units through the 1970s for emergency field communications 
-                      when radio encryption failed.
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Educational Legacy</h4>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Playfair remains a staple of cryptography education because it demonstrates:
-                  </p>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-                    <li><strong className="text-indigo-400">Digraphic Substitution:</strong> First practical implementation of pair-based encryption</li>
-                    <li><strong className="text-indigo-400">Geometric Rules:</strong> Spatial relationships in key matrix determine transformations</li>
-                    <li><strong className="text-indigo-400">Manual Practicality:</strong> Can be performed without computers or machines</li>
-                    <li><strong className="text-indigo-400">Historical Significance:</strong> Bridge between classical substitution and modern block ciphers</li>
-                    <li><strong className="text-indigo-400">Cryptanalysis:</strong> Teaches digraph frequency analysis techniques</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-2">Fun Facts</h4>
-                  <div className="bg-background/50 rounded-lg p-3 text-sm text-muted-foreground space-y-2">
-                    <div>🎯 Playfair was the first cipher used by the U.S. Army in 1912</div>
-                    <div>📚 Featured in Dorothy L. Sayers' mystery novel "Have His Carcase" (1932)</div>
-                    <div>🎮 Appears in video games like "Assassin's Creed" and puzzle hunts as a classic cipher</div>
-                    <div>⚡ A skilled operator could encrypt/decrypt at ~1 letter per second (much faster than complex ciphers)</div>
-                    <div>🌍 Used by British colonial forces across multiple continents simultaneously during WWI</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
